@@ -22,7 +22,6 @@ namespace SchoolDocuments.Admin
     /// </summary>
     public sealed partial class TemplatesPage : Page
     {
-        Frame rootFrame;
         public TemplatesPage()
         {
             this.InitializeComponent();
@@ -30,7 +29,7 @@ namespace SchoolDocuments.Admin
 
         private void createTemplateBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            Frame.Navigate(typeof(CreateTemplatePage));
         }
 
         private void TemplatesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)

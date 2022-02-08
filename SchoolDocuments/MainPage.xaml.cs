@@ -23,7 +23,7 @@ namespace SchoolDocuments
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        Frame rootFrame;
+        
         public MainPage()
         {
             this.InitializeComponent();
@@ -31,7 +31,7 @@ namespace SchoolDocuments
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            rootFrame.Navigate(typeof(AdminPage));
+            Frame.Navigate(typeof(AdminPage));
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
