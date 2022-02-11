@@ -66,7 +66,7 @@ namespace SchoolDocuments.Admin
             paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
             paragraph = section.AddParagraph();
             //Добавление картинки
-            Stream imageStream = this.GetType().Assembly.GetManifestResourceStream("Documents.Assets.Header.png");
+            Stream imageStream = GetType().Assembly.GetManifestResourceStream("SchoolDocuments.Assets.Header.png");
             IWPicture picture = paragraph.AppendPicture(imageStream);
             picture.TextWrappingStyle = TextWrappingStyle.InFrontOfText;
             picture.VerticalOrigin = VerticalOrigin.Margin;
@@ -87,11 +87,8 @@ namespace SchoolDocuments.Admin
             textRange.CharacterFormat.FontSize = 12f;
 
             MemoryStream stream = new MemoryStream();
-
-            //Saves the Word document to MemoryStream
             await document.SaveAsync(stream, FormatType.Docx);
 
-            //Saves the stream as Word document file in local machine
             Save(stream, "Sample.docx");
         }
 
