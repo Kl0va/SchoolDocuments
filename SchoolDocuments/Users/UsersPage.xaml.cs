@@ -22,15 +22,22 @@ namespace SchoolDocuments.Users
     /// </summary>
     public sealed partial class UsersPage : Page
     {
-        Frame rootFrame;
+        private static string email;
         public UsersPage()
         {
             this.InitializeComponent();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if(e.Parameter != null)
+            {
+                email = e.Parameter as string;
+            }
+        }
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            rootFrame.Navigate(typeof(SettingsPage));
+            Frame.Navigate(typeof(SettingsPage),email);
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)

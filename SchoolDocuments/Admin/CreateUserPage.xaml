@@ -34,11 +34,11 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBox x:Name="Email" Grid.Row="0" PlaceholderText="Email пользователя" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450"></TextBox>
-            <TextBox x:Name="Password" Grid.Row="1" PlaceholderText="Пароль пользователя" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450"></TextBox>
+            <PasswordBox x:Name="Password" Grid.Row="1" PlaceholderText="Пароль пользователя" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450"></PasswordBox>
             <TextBox x:Name="FirstName" Grid.Row="2" PlaceholderText="Имя пользователя" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450"></TextBox>
             <TextBox x:Name="SecondName" Grid.Row="3" PlaceholderText="Фамилия пользователя" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450"></TextBox>
             <TextBox x:Name="MiddleName" Grid.Row="4" PlaceholderText="Отчество пользователя" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450"></TextBox>
-            <Button x:Name="CreateUser" Grid.Row="5" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450" CornerRadius="10">Создать пользователя</Button>
+            <Button x:Name="CreateUser" Grid.Row="5" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450" CornerRadius="10" Click="CreateUser_Click">Создать пользователя</Button>
         </Grid>
 
     </Grid>

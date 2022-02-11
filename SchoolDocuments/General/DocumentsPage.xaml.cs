@@ -29,7 +29,7 @@ namespace SchoolDocuments.General
 
         private void addDocument_Click(object sender, RoutedEventArgs e)
         {
-
+            Frame.Navigate(typeof(CreateDocument));
         }
     }
 }

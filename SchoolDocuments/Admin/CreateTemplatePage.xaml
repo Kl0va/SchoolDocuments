@@ -34,7 +34,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <RichEditBox x:Name="TemplateText" Grid.Row="0"  FontSize="14" Margin="100,0,100,0" FontFamily="Times New Roman" TextAlignment="Justify"/>
+            <RichEditBox x:Name="TemplateText" Grid.Row="0"  FontSize="14" Margin="100,0,100,0" FontFamily="Times New Roman" TextAlignment="Justify" PlaceholderText="Содержимое шаблона"/>
         </Grid>
     </Grid>
 </Page>

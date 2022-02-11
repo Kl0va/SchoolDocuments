@@ -29,15 +29,33 @@ namespace SchoolDocuments.Admin
     /// </summary>
     public sealed partial class CreateTemplatePage : Page
     {
+        private static bool saving = false;
         public CreateTemplatePage()
         {
             this.InitializeComponent();
+            string mainSignatory = "\nДиректор ГБОУ Школа № 654 имени А.Д. Фридмана                                    С.Л. Видякин";
+            TemplateText.Document.SetText(TextSetOptions.FormatRtf, mainSignatory);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.Parameter != null)
+            {
+                //Models.Template template = e.Parameter as Models.Template;
+                //TemplateText.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, template.sampleByte);
+                //pageHeader.Text = template.name;
+                saving = true;
+            }
         }
 
         public static WordDocument document = new WordDocument();
         public static WSection section = document.AddSection() as WSection;
         private async void save_Click(object sender, RoutedEventArgs e)
         {
+            if (saving)
+            {
+                //Тут сохранение шаблонов (API)
+            }
             //Отступы
             section.PageSetup.Margins.All = 72;
             //размер окна документа
@@ -66,7 +84,7 @@ namespace SchoolDocuments.Admin
             paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
             paragraph = section.AddParagraph();
             //Добавление картинки
-            Stream imageStream = GetType().Assembly.GetManifestResourceStream("SchoolDocuments.Assets.Header.png");
+            Stream imageStream = this.GetType().Assembly.GetManifestResourceStream("SchoolDocuments.Assets.Header.png");
             IWPicture picture = paragraph.AppendPicture(imageStream);
             picture.TextWrappingStyle = TextWrappingStyle.InFrontOfText;
             picture.VerticalOrigin = VerticalOrigin.Margin;
@@ -88,7 +106,7 @@ namespace SchoolDocuments.Admin
 
             MemoryStream stream = new MemoryStream();
             await document.SaveAsync(stream, FormatType.Docx);
-
+            //Сохранение (API)
             Save(stream, "Sample.docx");
         }
 
@@ -121,7 +139,6 @@ namespace SchoolDocuments.Admin
                     }
                 }
             }
-            await Windows.System.Launcher.LaunchFileAsync(stFile);
         }
     }
 }

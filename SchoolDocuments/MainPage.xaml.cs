@@ -1,5 +1,6 @@
 ﻿using SchoolDocuments.Admin;
 using System;
+using SchoolDocuments.Users;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace SchoolDocuments
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+            Frame.Navigate(typeof(Users.UsersPage), Email.Text);
         }
     }
 }

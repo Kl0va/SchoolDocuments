@@ -22,7 +22,6 @@ namespace SchoolDocuments.Admin
     /// </summary>
     public sealed partial class UsersPage : Page
     {
-        Frame rootFrame;
         public UsersPage()
         {
             this.InitializeComponent();
@@ -35,7 +34,7 @@ namespace SchoolDocuments.Admin
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            rootFrame.Navigate(typeof(CreateUserPage));
+            Frame.Navigate(typeof(CreateUserPage));
         }
     }
 }

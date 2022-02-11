@@ -26,5 +26,13 @@ namespace SchoolDocuments.Admin
         {
             this.InitializeComponent();
         }
+
+        private void CreateUser_Click(object sender, RoutedEventArgs e)
+        {
+            if(Email.Text != "" && Email.Text.Length >=7 && Password.Password != "" && Password.Password.Length >= 3 && FirstName.Text != "" && SecondName.Text != "")
+            {
+                //Создание пользователя (API)
+            }
+        }
     }
 }

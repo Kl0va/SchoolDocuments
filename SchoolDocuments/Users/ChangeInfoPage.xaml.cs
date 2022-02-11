@@ -26,5 +26,13 @@ namespace SchoolDocuments.Users
         {
             this.InitializeComponent();
         }
+
+        private void CreateUser_Click(object sender, RoutedEventArgs e)
+        {
+            if(FirstName.Text != "" && SecondName.Text != "")
+            {
+                //Изменение данных (API)
+            }
+        }
     }
 }

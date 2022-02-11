@@ -128,7 +128,7 @@
     <Compile Include="Admin\TemplatesPage.xaml.cs">
       <DependentUpon>TemplatesPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Admin\UsersPage.xaml.cs">
+    <Compile Include="Admin\UsersPage.cs">
       <DependentUpon>UsersPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">

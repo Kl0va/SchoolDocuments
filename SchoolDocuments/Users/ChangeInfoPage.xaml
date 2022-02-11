@@ -34,7 +34,7 @@
             <TextBox x:Name="FirstName" Grid.Row="0" PlaceholderText="Имя пользователя" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450"></TextBox>
             <TextBox x:Name="SecondName" Grid.Row="1" PlaceholderText="Фамилия пользователя" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450"></TextBox>
             <TextBox x:Name="MiddleName" Grid.Row="2" PlaceholderText="Отчество пользователя" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450"></TextBox>
-            <Button x:Name="CreateUser" Grid.Row="3" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450" CornerRadius="10">Изменить данные</Button>
+            <Button x:Name="CreateUser" Grid.Row="3" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" Width="450" CornerRadius="10" Click="CreateUser_Click">Изменить данные</Button>
         </Grid>
 
     </Grid>

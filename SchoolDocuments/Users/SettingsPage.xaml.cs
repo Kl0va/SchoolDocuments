@@ -22,20 +22,28 @@ namespace SchoolDocuments.Users
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        Frame rootFrame;
+        private static string email;
         public SettingsPage()
         {
             this.InitializeComponent();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if(e.Parameter != null)
+            {
+                email = e.Parameter as string;
+            }
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            rootFrame.Navigate(typeof(ChangePasswordPage));
+            Frame.Navigate(typeof(ChangePasswordPage),email);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            rootFrame.Navigate(typeof(ChangeInfoPage));
+            Frame.Navigate(typeof(ChangeInfoPage),email);
         }
     }
 }
