@@ -38,12 +38,12 @@ namespace SchoolDocuments.Users
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(ChangePasswordPage),email);
+            
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(ChangeInfoPage),email);
+            
         }
     }
 }
