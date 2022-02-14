@@ -14,11 +14,11 @@ namespace SchoolDocuments.Models
         public string desc { get; set; }
         public DateTime created { get; set; }
         public DateTime deadline { get; set; }
-        public int authorId { get; set; }
+        public User authorId { get; set; }
         public List<Performer> performers { get; set; }
 
         [JsonConstructor]
-        public Task(string Title,string Desc,DateTime Created,DateTime Deadline,int AuthorId,List<Performer> Performers)
+        public Task(string Title,string Desc,DateTime Created,DateTime Deadline,User AuthorId,List<Performer> Performers)
         {
             title = Title;
             desc = Desc;

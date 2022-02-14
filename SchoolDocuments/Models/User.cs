@@ -9,6 +9,7 @@ namespace SchoolDocuments.Models
 {
     class User
     {
+        public string id { get; set; }
         public string firstName { get; set; }
         public string secondName { get; set; }
         public string middleName { get; set; }

@@ -10,18 +10,20 @@ namespace SchoolDocuments.Models
     class Performer
     {
         public int id { get; set; }
-        public int userId { get; set; }
+        public User userId { get; set; }
         public int taskId { get; set; }
         public PerformerStatus status { get; set; }
         public string comment { get; set; }
+        public List<Document> documents { get; set; }
 
         [JsonConstructor]
-        public Performer(int UserId, int TaskId, PerformerStatus Status, string Comment)
+        public Performer(User UserId, int TaskId, PerformerStatus Status, string Comment, List<Document> Documents)
         {
             userId = UserId;
             taskId = TaskId;
             status = Status;
             comment = Comment;
+            documents = Documents;
         }
     }
 }

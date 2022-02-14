@@ -11,7 +11,7 @@ namespace SchoolDocuments.Models
     {
         public int id { get; set; }
         public int templateId { get; set; }
-        public int authorId { get; set; }
+        public User authorId { get; set; }
         public string title { get; set; }
         public string file { get; set; }
         public string desc { get; set; }
@@ -19,7 +19,7 @@ namespace SchoolDocuments.Models
         public List<Agreement> agreement { get; set; }
 
         [JsonConstructor]
-        public Document(int TemplateId,int AuthorId,string Title,string File,string Desc,List<Familiarize> Familiarize,List<Agreement> Agreement)
+        public Document(int TemplateId,User AuthorId,string Title,string File,string Desc,List<Familiarize> Familiarize,List<Agreement> Agreement)
         {
             templateId = TemplateId;
             authorId = AuthorId;

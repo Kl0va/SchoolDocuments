@@ -23,6 +23,8 @@ using System.Net.Http;
 using Windows.Data.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using SchoolDocuments.Users;
+using Windows.UI.Xaml.Media.Imaging;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -88,6 +90,19 @@ namespace SchoolDocuments
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            var isDark = Application.Current.RequestedTheme == ApplicationTheme.Dark;
+            if (isDark == true)
+            {
+                logo.Source = new BitmapImage(new Uri("ms-appx:///Assets/white.png"));
+            }
+            else
+            {
+                logo.Source = new BitmapImage(new Uri("ms-appx:///Assets/Wide310x150Logo.scale-200.png"));
+            }
+
+
+
+
             if (e.Parameter is Uri)
             {
                 // Gets URI from navigation parameters.
@@ -185,7 +200,8 @@ namespace SchoolDocuments
 
 
             JObject js = JObject.Parse(userinfoResponseContent);
-            Email.Text = js.Value<string>("sub");
+            //Email.Text = js.Value<string>("sub");
+            Frame.Navigate(typeof(Users.UsersPage));
             output(userinfoResponseContent);
         }
 

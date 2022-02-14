@@ -38,11 +38,6 @@ namespace SchoolDocuments.Admin
             {
                 NavigateTemplates();
             }
-            else if (users.IsSelected)
-            {
-                NavigateUsers();
-
-            }
         }
 
         private void NavigateDocuments()
@@ -57,12 +52,6 @@ namespace SchoolDocuments.Admin
             pageHeader.Text = "Шаблоны документов";
         }
 
-        private void NavigateUsers()
-        {
-            myFrame.Navigate(typeof(UsersPage), Frame);
-            listOfNavigation.SelectedItem = users;
-            pageHeader.Text = "Пользователи";
-        }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
