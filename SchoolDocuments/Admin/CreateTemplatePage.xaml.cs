@@ -47,6 +47,7 @@ namespace SchoolDocuments.Admin
                 TemplateText.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, template.file);
                 pageHeader.Text = template.name;
                 saving = true;
+                //TEST
             }
         }
 
