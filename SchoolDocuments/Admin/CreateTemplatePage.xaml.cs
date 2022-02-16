@@ -187,8 +187,9 @@ namespace SchoolDocuments.Admin
                         outstream.Flush();
                     }
                 }
-                Frame.Navigate(typeof(TemplatesPage));
+                Frame.Navigate(typeof(AdminPage));
             }
         }
+
     }
 }

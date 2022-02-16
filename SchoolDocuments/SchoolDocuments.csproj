@@ -151,6 +151,7 @@
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Moduls\ApiWork.cs" />
+    <Compile Include="Moduls\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>

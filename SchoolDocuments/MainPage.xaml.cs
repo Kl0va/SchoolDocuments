@@ -25,6 +25,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using SchoolDocuments.Users;
 using Windows.UI.Xaml.Media.Imaging;
+using SchoolDocuments.Moduls;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -51,6 +52,7 @@ namespace SchoolDocuments
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            UserInfo.Id = "123";
             Frame.Navigate(typeof(AdminPage));
         }
 
@@ -200,7 +202,7 @@ namespace SchoolDocuments
 
 
             JObject js = JObject.Parse(userinfoResponseContent);
-            //Email.Text = js.Value<string>("sub");
+            UserInfo.Id = js.Value<string>("sub");
             Frame.Navigate(typeof(Users.UsersPage));
             output(userinfoResponseContent);
         }

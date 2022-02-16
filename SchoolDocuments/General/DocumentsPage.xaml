@@ -48,7 +48,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="{Binding title}" Grid.Row="0" FontSize="25" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding file}" Grid.Row="1" FontSize="25" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding author.firstName}" Grid.Row="1" FontSize="25" HorizontalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>

@@ -10,16 +10,16 @@ namespace SchoolDocuments.Models
     class Agreement
     {
         public int id { get; set; }
-        public int userId { get; set; }
+        public string userId { get; set; }
         public int documentId { get; set; }
         public DateTime deadline { get; set; }
-        public AgreementStatus status { get; set; }
+        public String status { get; set; }
         public string comment { get; set; }
-        public DateTime created { get; set; }
-        public DateTime statusChanged { get; set; }
+        public  DateTime created { get; set; } 
+        //public DateTime? statusChanged { get; set; } 
 
         [JsonConstructor]
-        public Agreement(int UserId,int DocumentId,DateTime Deadline,AgreementStatus Status,string Comment,DateTime Created,DateTime StatusChanged)
+        public Agreement(string UserId,int DocumentId,DateTime Deadline,String Status,string Comment,DateTime Created)
         {
             userId = UserId;
             documentId = DocumentId;
@@ -27,7 +27,7 @@ namespace SchoolDocuments.Models
             status = Status;
             comment = Comment;
             created = Created;
-            statusChanged = StatusChanged;
+            //statusChanged = StatusChanged;
         }
     }
 }
