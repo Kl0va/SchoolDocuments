@@ -23,8 +23,6 @@
                     <RowDefinition Height="0.1*"/>
                 </Grid.RowDefinitions>
                 <Button Grid.Row="2" Content="Войти" Margin="0,20,0,0" VerticalAlignment="Top" CornerRadius="10" HorizontalAlignment="Center" Height="50" Width="355" FontSize="25" Click="Button_Click_1"/>
-                <TextBox Grid.Row="0"  HorizontalAlignment="Center" VerticalAlignment="Top"  CornerRadius="10" Text=""  HorizontalContentAlignment="Center" Height="59" Width="355" InputScope="Default" Header="Почта" Margin="0,50,0,0" Background="DarkGray" Name="Email"/>
-                <PasswordBox Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Top"  CornerRadius="10"  HorizontalContentAlignment="Center" Height="60" Width="355" Header="Пароль" Margin="0,0,0,0" Background="DarkGray" Name="Password"/>
                 <Button Grid.Row="3" Content="Суперпользователь" FontSize="25" Click="Button_Click" Padding="0,0,0,0" Width="239" HorizontalAlignment="Right" Margin="0,0,45,0" VerticalAlignment="Bottom" Height="38" />
             </Grid>
         </Grid>
