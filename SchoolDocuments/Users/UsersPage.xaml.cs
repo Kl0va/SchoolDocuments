@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SchoolDocuments.General;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace SchoolDocuments.Users
             {
                 email = e.Parameter as string;
             }
+            NavigateDocuments();
         }
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
@@ -42,12 +44,21 @@ namespace SchoolDocuments.Users
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
-
+            mySplitView.IsPaneOpen = !mySplitView.IsPaneOpen;
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (documents.IsSelected)
+            {
+                NavigateDocuments();
+            }
+        }
 
+        public void NavigateDocuments()
+        {
+            myFrame.Navigate(typeof(DocumentsPage), Frame);
+            pageHeader.Text = "Документы";
         }
     }
 }

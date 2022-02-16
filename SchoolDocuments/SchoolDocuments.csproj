@@ -122,9 +122,6 @@
     <Compile Include="Admin\CreateTemplatePage.xaml.cs">
       <DependentUpon>CreateTemplatePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Admin\CreateUserPage.xaml.cs">
-      <DependentUpon>CreateUserPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Admin\TemplatesPage.xaml.cs">
       <DependentUpon>TemplatesPage.xaml</DependentUpon>
     </Compile>
@@ -189,10 +186,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Admin\CreateTemplatePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Admin\CreateUserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

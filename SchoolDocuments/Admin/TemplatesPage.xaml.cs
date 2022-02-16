@@ -26,6 +26,7 @@ namespace SchoolDocuments.Admin
     public sealed partial class TemplatesPage : Page
     {
         private static readonly List<Template> templates = new List<Template>();
+        private static readonly List<Template> templatesSearch = new List<Template>();
         Frame rootFrame;
         public TemplatesPage()
         {
@@ -58,6 +59,20 @@ namespace SchoolDocuments.Admin
             });
             TemplatesGrid.ItemsSource = templates;
             progress.Visibility = Visibility.Collapsed;
+        }
+
+        private void search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            templatesSearch.Clear();
+            foreach(Template template in templates)
+            {
+                if (template.name.Contains(search.Text))
+                {
+                    templatesSearch.Add(template);
+                }
+            }
+            TemplatesGrid.ItemsSource = null;
+            TemplatesGrid.ItemsSource = templatesSearch;
         }
     }
 }

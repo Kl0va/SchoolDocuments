@@ -16,6 +16,14 @@ namespace SchoolDocuments.Models
         public string email { get; set; }
         public string role { get; set; }
 
+        public string fullName
+        {
+            get
+            {
+                return firstName + secondName + middleName;
+            } 
+        }
+
         [JsonConstructor]
         public User(string FirstName, string SecondName,string MiddleName,string Email,string Role)
         {

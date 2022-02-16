@@ -26,6 +26,7 @@ namespace SchoolDocuments.General
     public sealed partial class DocumentsPage : Page
     {
         private static readonly List<Models.Document> documents = new List<Models.Document>();
+        private static readonly List<Models.Document> documentsSearch = new List<Models.Document>();
         Frame rootFrame;
         public DocumentsPage()
         {
@@ -54,6 +55,20 @@ namespace SchoolDocuments.General
 
             documentsGrid.ItemsSource = documents;
             progress.Visibility = Visibility.Collapsed;
+        }
+
+        private void search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            documentsSearch.Clear();
+            foreach (Document document in documents)
+            {
+                if (document.title.Contains(search.Text))
+                {
+                    documentsSearch.Add(document);
+                }
+            }
+            documentsGrid.ItemsSource = null;
+            documentsGrid.ItemsSource = documentsSearch;
         }
     }
 }
