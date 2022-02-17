@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SchoolDocuments.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace SchoolDocuments.Models
     class Template
     {
         public string name { get; set; }
-        public string file { get; set; }
+
+        [JsonConverter(typeof(BytesConverter))]
+        public byte[] file { get; set; }
 
         [JsonConstructor]
-        public Template(string Name,string File)
+        public Template(string Name,byte[] File)
         {
             name = Name;
             file = File;

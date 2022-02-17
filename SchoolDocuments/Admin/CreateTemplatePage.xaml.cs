@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -35,19 +36,23 @@ namespace SchoolDocuments.Admin
         public CreateTemplatePage()
         {
             this.InitializeComponent();
-            string mainSignatory = "\nДиректор ГБОУ Школа № 654 имени А.Д. Фридмана                                    С.Л. Видякин";
-            TemplateText.Document.SetText(TextSetOptions.FormatRtf, mainSignatory);
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
                 Models.Template template = e.Parameter as Models.Template;
-                TemplateText.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, template.file);
+                Windows.Storage.StorageFolder storageFolder =
+    Windows.Storage.ApplicationData.Current.LocalFolder;
+
+                File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", template.file.ToArray());
+                StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+                Windows.Storage.Streams.IRandomAccessStream randAccStream =
+                await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+                TemplateText.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
                 pageHeader.Text = template.name;
                 saving = true;
-                //TEST
             }
         }
 
@@ -68,7 +73,7 @@ namespace SchoolDocuments.Admin
             bool check = true;
             foreach (Models.Template checkName in templates)
             {
-                if (checkName.name == pageHeader.Text)
+                if (checkName.name == pageHeader.Text && !saving)
                 {
                     ContentDialog errorDialog = new ContentDialog()
                     {
@@ -85,10 +90,19 @@ namespace SchoolDocuments.Admin
             {
                 if (saving)
                 {
-                    string saveText = "";
-                    //Добавление текста
-                    TemplateText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out saveText);
-                    Models.Template saveTemplate = new Models.Template(pageHeader.Text, saveText);
+                    Windows.Storage.StorageFolder storageFolder =
+    Windows.Storage.ApplicationData.Current.LocalFolder;
+
+                    byte[] bytes = File.ReadAllBytes(storageFolder.Path + @"\save.mod.docx");
+                    StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+
+                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                    TemplateText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                    randAccStream.Dispose();
+
+
+                    Models.Template saveTemplate = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
                     ApiWork.SaveTemplate(saveTemplate);
                     ContentDialog errorDialog = new ContentDialog()
                     {
@@ -142,17 +156,31 @@ namespace SchoolDocuments.Admin
                     paragraph = section.AddParagraph();
                     string text = "";
                     //Добавление текста
-                    TemplateText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out text);
-                    string typeName = pageHeader.Text;
-                    string inputText = typeName + "\n" + text;
-                    TemplateText.Document.SetText(TextSetOptions.FormatRtf, inputText);
-                    WTextRange textRange = new WTextRange(document);
-                    textRange = paragraph.AppendText("\n\n" + inputText) as WTextRange;
-                    textRange.CharacterFormat.FontSize = 12f;
+                    //TemplateText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out text);
+                    //string typeName = pageHeader.Text;
+                    //string inputText = typeName + "\n" + text;
+                    //TemplateText.Document.SetText(TextSetOptions.FormatRtf, inputText);
+                    //WTextRange textRange = new WTextRange(document);
+                    //textRange = paragraph.AppendText("\n\n" + inputText) as WTextRange;
+                    //textRange.CharacterFormat.FontSize = 12f;
 
                     MemoryStream stream = new MemoryStream();
                     await document.SaveAsync(stream, FormatType.Docx);
-                    Models.Template template = new Models.Template(pageHeader.Text, inputText);
+
+                    Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+
+
+                    //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
+                    File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+
+                    StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+
+                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                    TemplateText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                    randAccStream.Dispose();
+
+                    Models.Template template = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
                     ApiWork.AddTemplate(template);
                     Save(stream, "Sample.docx");
                 }
@@ -191,5 +219,35 @@ namespace SchoolDocuments.Admin
             }
         }
 
+        private async void open_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.Storage.Pickers.FileOpenPicker open =
+            new Windows.Storage.Pickers.FileOpenPicker();
+            open.SuggestedStartLocation =
+                Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            open.FileTypeFilter.Add(".rtf");
+            Windows.Storage.StorageFile file = await open.PickSingleFileAsync();
+            if (file != null)
+            {
+                try
+                {
+                    Windows.Storage.Streams.IRandomAccessStream randAccStream =
+                await file.OpenAsync(Windows.Storage.FileAccessMode.Read);          
+                    // Load the file into the Document property of the RichEditBox.
+                    TemplateText.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
+                }
+                catch (Exception)
+                {
+                    ContentDialog errorDialog = new ContentDialog()
+                    {
+                        Title = "File open error",
+                        Content = "Sorry, I couldn't open the file.",
+                        PrimaryButtonText = "Ok"
+                    };
+
+                    await errorDialog.ShowAsync();
+                }
+            }
+        }
     }
 }

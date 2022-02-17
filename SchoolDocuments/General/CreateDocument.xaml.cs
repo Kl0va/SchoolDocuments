@@ -193,7 +193,7 @@ namespace SchoolDocuments.General
             });
             foreach (Models.Template template1 in searchTemplate)
             {
-                DocumentText.Document.SetText(TextSetOptions.FormatRtf, template1.file);
+                //DocumentText.Document.SetText(TextSetOptions.FormatRtf, template1.file);
             }
         }
     }

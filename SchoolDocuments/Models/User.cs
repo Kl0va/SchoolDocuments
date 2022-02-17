@@ -16,6 +16,7 @@ namespace SchoolDocuments.Models
         public string email { get; set; }
         public string role { get; set; }
 
+        [JsonIgnore]
         public string fullName
         {
             get

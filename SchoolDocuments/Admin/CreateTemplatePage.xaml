@@ -27,6 +27,12 @@
                     <TextBlock>Сохранить</TextBlock>
                 </StackPanel>
             </Button>
+            <Button CornerRadius="10" Grid.Column="0" x:Name="open" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" Click="open_Click" >
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Center" Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" ></TextBlock>
+                    <TextBlock>Открыть</TextBlock>
+                </StackPanel>
+            </Button>
 
         </Grid>
         <Grid Grid.Row="1">

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="SchoolDocuments.Admin.AdminPage" BaseTypeListCollapsed="true">
-    <Position X="7.25" Y="0.5" Width="1.5" />
+    <Position X="5.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQCAIAAAAQAAAAAAABAAAA=</HashCode>
       <FileName>Admin\AdminPage.xaml.cs</FileName>
@@ -9,31 +9,23 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SchoolDocuments.Admin.CreateTemplatePage" BaseTypeListCollapsed="true">
-    <Position X="12.75" Y="0.5" Width="1.5" />
+    <Position X="11" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAAAIAAAAAAAABAAIAEAAQAAAIAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Admin\CreateTemplatePage.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="SchoolDocuments.Admin.CreateUserPage" BaseTypeListCollapsed="true">
-    <Position X="9" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Admin\CreateUserPage.xaml.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
   <Class Name="SchoolDocuments.Admin.TemplatesPage" BaseTypeListCollapsed="true">
-    <Position X="7.25" Y="3" Width="1.5" />
+    <Position X="11" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAAAAAAAAAABAAAAAAAQAAAAAAAAAgAAAAAIAAAA=</HashCode>
+      <HashCode>BAAAAAIAAAAAAABAAAACAAQAAAAAAAAAgAAAAAIAAAA=</HashCode>
       <FileName>Admin\TemplatesPage.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SchoolDocuments.General.CreateDocument" BaseTypeListCollapsed="true">
-    <Position X="11" Y="0.5" Width="1.5" />
+    <Position X="9.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>MAgCgAQAAAAAAEBAAEEEgEAAAQCAACAAAAAAAAEAAAA=</HashCode>
       <FileName>General\CreateDocument.xaml.cs</FileName>
@@ -41,23 +33,23 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SchoolDocuments.General.DocumentsPage" BaseTypeListCollapsed="true">
-    <Position X="9" Y="2" Width="1.5" />
+    <Position X="5.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAIAAAAAAAAAAAAAAQAAAIAAAAAgAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAIAAAAAAAAAAACEAQAAAIAAAAAgAAAAAAAAAA=</HashCode>
       <FileName>General\DocumentsPage.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SchoolDocuments.Users.UsersPage" BaseTypeListCollapsed="true">
-    <Position X="12.75" Y="3.5" Width="1.5" />
+    <Position X="7.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAgAABAAAQAAAAAAAQAAAAAAABAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAgAABAAAQAAIAAAAQAAAAAAABAAAA=</HashCode>
       <FileName>Users\UsersPage.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SchoolDocuments.MainPage" BaseTypeListCollapsed="true">
-    <Position X="14.5" Y="0.5" Width="1.5" />
+    <Position X="7.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAEAAAEABAAAAAAAAACUAKAAQAEAEAAAAAgBAAAA=</HashCode>
       <FileName>MainPage.xaml.cs</FileName>
