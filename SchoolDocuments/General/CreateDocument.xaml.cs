@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -79,12 +80,22 @@ namespace SchoolDocuments.General
             }
         }
         private static bool first = true;
-        private void addsigner_Click(object sender, RoutedEventArgs e)
+        private async void addsigner_Click(object sender, RoutedEventArgs e)
         {
             string text = "";
             DocumentText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out text);
             if (first)
             {
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+
+                StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+
+                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                randAccStream.Dispose();
+
                 text += "\n\nС приказом ознакомлен(а):\n" + Signatory.SelectedValue.ToString();
                 DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
                 signerList.Add(Signatory.SelectedValue.ToString());
@@ -142,7 +153,22 @@ namespace SchoolDocuments.General
                         }
                     }
                 });
-                Document document = new Document(Template.SelectedValue.ToString(),users[0],pageHeader.Text,saveText,"",famList1,signerList1);
+
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+
+
+                //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
+                File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+
+                StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+
+                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                randAccStream.Dispose();
+                
+
+                Document document = new Document(Template.SelectedValue.ToString(),users[0],pageHeader.Text, File.ReadAllBytes(file.Path), "",famList1,signerList1);
                 ApiWork.AddDocument(document);
             }
             else
@@ -193,7 +219,11 @@ namespace SchoolDocuments.General
             });
             foreach (Models.Template template1 in searchTemplate)
             {
-                //DocumentText.Document.SetText(TextSetOptions.FormatRtf, template1.file);
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", template1.file.ToArray());
+                StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+                DocumentText.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
             }
         }
     }
