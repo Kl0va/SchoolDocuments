@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -83,28 +84,30 @@ namespace SchoolDocuments.General
         private async void addsigner_Click(object sender, RoutedEventArgs e)
         {
             string text = "";
-            DocumentText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out text);
+            DocumentText.Document.GetText(TextGetOptions.AdjustCrlf, out text);
             if (first)
             {
-                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+                //string signText = "\n\nС приказом ознакомлен(а):\n" + Signatory.SelectedValue.ToString();
+                //DocumentText.Document.SetText(TextSetOptions.UnicodeBidi, signText);
+                //DocumentText.Document.GetText(TextGetOptions.AdjustCrlf, out signText);
+                ////signText = "\n\nС приказом ознакомлен(а):\n" + Signatory.SelectedValue.ToString();
+                //StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                //File.Create(storageFolder.Path + @"\save.mod.rtf").Close();
+                //StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.rtf");
+                //string sumText = text + signText;
+                //File.WriteAllText(file.Path, sumText);
+                
 
-                StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
-
-                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
-                DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
-                await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                randAccStream.Dispose();
-
-                text += "\n\nС приказом ознакомлен(а):\n" + Signatory.SelectedValue.ToString();
-                DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
+                //var randAccStream = await file.OpenAsync(FileAccessMode.Read);
+                //DocumentText.Document.LoadFromStream(TextSetOptions.CheckTextLimit, randAccStream);
+                //randAccStream.Dispose();
                 signerList.Add(Signatory.SelectedValue.ToString());
                 first = false;
             }
             else
             {
-                text += "\n" + Signatory.SelectedValue.ToString();
-                DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
+                //text += "\n" + Signatory.SelectedValue.ToString();
+                //DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
                 signerList.Add(Signatory.SelectedValue.ToString());
             }
         }
@@ -112,7 +115,7 @@ namespace SchoolDocuments.General
         private static readonly List<Models.Template> templates1 = new List<Models.Template>();
         private async void save_Click(object sender, RoutedEventArgs e)
         {
-            if(Template.SelectedValue.ToString() != "")
+            if (Template.SelectedValue.ToString() != "")
             {
                 Task<List<User>> userTask = ApiWork.GetAllUsers();
                 await userTask.ContinueWith(task =>
@@ -133,13 +136,14 @@ namespace SchoolDocuments.General
                 string saveText = "";
                 //Добавление текста
                 DocumentText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out saveText);
-                foreach (User user1 in users) {
+                foreach (User user1 in users)
+                {
                     Familiarize familiarize = new Familiarize(user1.id, 0, false, DateTime.Now);
                     famList1.Add(familiarize);
                 }
-                foreach(User user2 in usersSig)
+                foreach (User user2 in usersSig)
                 {
-                    Agreement agreement = new Agreement(user2.id,0,TimeOfAgreement.Date.DateTime,AgreementStatus.Sent.ToString(),"",DateTime.Now);
+                    Agreement agreement = new Agreement(user2.id, 0, TimeOfAgreement.Date.DateTime, AgreementStatus.Sent, "", DateTime.Now);
                     signerList1.Add(agreement);
                 }
                 await userTask.ContinueWith(task =>
@@ -166,9 +170,9 @@ namespace SchoolDocuments.General
                 DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
                 await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                 randAccStream.Dispose();
-                
 
-                Document document = new Document(Template.SelectedValue.ToString(),users[0],pageHeader.Text, File.ReadAllBytes(file.Path), "",famList1,signerList1);
+
+                Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text, File.ReadAllBytes(file.Path), "", famList1, signerList1);
                 ApiWork.AddDocument(document);
             }
             else

@@ -90,8 +90,7 @@ namespace SchoolDocuments.Admin
             {
                 if (saving)
                 {
-                    Windows.Storage.StorageFolder storageFolder =
-    Windows.Storage.ApplicationData.Current.LocalFolder;
+                    Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
                     byte[] bytes = File.ReadAllBytes(storageFolder.Path + @"\save.mod.docx");
                     StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
@@ -221,18 +220,16 @@ namespace SchoolDocuments.Admin
 
         private async void open_Click(object sender, RoutedEventArgs e)
         {
-            Windows.Storage.Pickers.FileOpenPicker open =
-            new Windows.Storage.Pickers.FileOpenPicker();
-            open.SuggestedStartLocation =
-                Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            Windows.Storage.Pickers.FileOpenPicker open = new Windows.Storage.Pickers.FileOpenPicker();
+            open.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
             open.FileTypeFilter.Add(".rtf");
             Windows.Storage.StorageFile file = await open.PickSingleFileAsync();
+
             if (file != null)
             {
                 try
                 {
-                    Windows.Storage.Streams.IRandomAccessStream randAccStream =
-                await file.OpenAsync(Windows.Storage.FileAccessMode.Read);          
+                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);          
                     // Load the file into the Document property of the RichEditBox.
                     TemplateText.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
                 }

@@ -37,6 +37,13 @@
 					<uap:DisplayName>SchoolDocuments</uap:DisplayName>
 				</uap:Protocol>
 			</uap:Extension>
+			<uap:Extension Category="windows.fileOpenPicker">
+				<uap:FileOpenPicker>
+					<uap:SupportedFileTypes>
+						<uap:SupportsAnyFileType/>
+					</uap:SupportedFileTypes>
+				</uap:FileOpenPicker>
+			</uap:Extension>
 		</Extensions>
       <uap:VisualElements
         DisplayName="SchoolDocuments"
