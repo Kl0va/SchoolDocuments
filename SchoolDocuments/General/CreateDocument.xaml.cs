@@ -1,5 +1,6 @@
 ﻿using SchoolDocuments.Models;
 using SchoolDocuments.Moduls;
+using SchoolDocuments.Users;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -172,8 +175,11 @@ namespace SchoolDocuments.General
                 randAccStream.Dispose();
 
 
+                MemoryStream stream = new MemoryStream();
+
                 Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text, File.ReadAllBytes(file.Path), "", famList1, signerList1);
                 ApiWork.AddDocument(document);
+                File.WriteAllBytes(storageFolder.Path,File.ReadAllBytes(file.Path));
             }
             else
             {
@@ -186,6 +192,40 @@ namespace SchoolDocuments.General
                 ContentDialogResult result = await errorDialog.ShowAsync();
             }
         }
+
+        async void Save(MemoryStream streams, string filename)
+        {
+            streams.Position = 0;
+            StorageFile stFile;
+            if (!(Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons")))
+            {
+                FileSavePicker savePicker = new FileSavePicker();
+                savePicker.DefaultFileExtension = ".docx";
+                savePicker.SuggestedFileName = filename;
+                savePicker.FileTypeChoices.Add("Word Documents", new List<string>() { ".docx" });
+                stFile = await savePicker.PickSaveFileAsync();
+            }
+            else
+            {
+                StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+                stFile = await local.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+            }
+            if (stFile != null)
+            {
+                using (IRandomAccessStream zipStream = await stFile.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    using (Stream outstream = zipStream.AsStreamForWrite())
+                    {
+                        byte[] buffer = streams.ToArray();
+                        outstream.Write(buffer, 0, buffer.Length);
+                        outstream.Flush();
+                    }
+                }
+                Frame.Navigate(typeof(UsersPage));
+            }
+        }
+
+
         private async void add_fam_Click(object sender, RoutedEventArgs e)
         {
             if (famList.Contains(familiarize.SelectedValue.ToString()))
