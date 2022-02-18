@@ -61,128 +61,132 @@ namespace SchoolDocuments.Admin
         private static readonly List<Models.Template> templates = new List<Models.Template>();
         private async void save_Click(object sender, RoutedEventArgs e)
         {
-            Task<List<Models.Template>> getTemplates = ApiWork.GetAllTemplates();
-            await getTemplates.ContinueWith(t =>
+            string checkText = "";
+            TemplateText.Document.GetText(TextGetOptions.FormatRtf,out checkText);
+            if (pageHeader.Text.Length >= 3 && checkText != "")
             {
-                templates.Clear();
-                foreach (Models.Template template1 in getTemplates.Result)
+                Task<List<Models.Template>> getTemplates = ApiWork.GetAllTemplates();
+                await getTemplates.ContinueWith(t =>
                 {
-                    templates.Add(template1);
-                }
-            });
-            bool check = true;
-            foreach (Models.Template checkName in templates)
-            {
-                if (checkName.name == pageHeader.Text && !saving)
-                {
-                    ContentDialog errorDialog = new ContentDialog()
+                    templates.Clear();
+                    foreach (Models.Template template1 in getTemplates.Result)
                     {
-                        Title = "Ошибка",
-                        Content = "Шаблон с таким именем уже существует",
-                        PrimaryButtonText = "Ок"
-                    };
-                    ContentDialogResult result = await errorDialog.ShowAsync();
-                    check = false;
-                    break;
-                }
-            }
-            if (check)
-            {
-                if (saving)
+                        templates.Add(template1);
+                    }
+                });
+                bool check = true;
+                foreach (Models.Template checkName in templates)
                 {
-                    Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-
-                    byte[] bytes = File.ReadAllBytes(storageFolder.Path + @"\save.mod.docx");
-                    StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
-
-                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
-                    TemplateText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
-                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                    randAccStream.Dispose();
-
-
-                    Models.Template saveTemplate = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
-                    ApiWork.SaveTemplate(saveTemplate);
-                    ContentDialog errorDialog = new ContentDialog()
+                    if (checkName.name == pageHeader.Text && !saving)
                     {
-                        Title = "Успешно",
-                        Content = "Шаблон успешно обновлен",
-                        PrimaryButtonText = "Ок"
-                    };
-                    ContentDialogResult result = await errorDialog.ShowAsync();
-                    Frame.Navigate(typeof(TemplatesPage));
-
+                        ContentDialog errorDialog = new ContentDialog()
+                        {
+                            Title = "Ошибка",
+                            Content = "Шаблон с таким именем уже существует",
+                            PrimaryButtonText = "Ок"
+                        };
+                        ContentDialogResult result = await errorDialog.ShowAsync();
+                        check = false;
+                        break;
+                    }
                 }
-                else
+                if (check)
                 {
-                    //Отступы
-                    section.PageSetup.Margins.All = 72;
-                    //размер окна документа
-                    section.PageSetup.PageSize = new Syncfusion.DocIO.DLS.SizeF(612, 792);
+                    if (saving)
+                    {
+                        Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
-                    //Создание стиля
-                    WParagraphStyle style = document.AddParagraphStyle("Normal") as WParagraphStyle;
-                    style.CharacterFormat.FontName = "Times New Roman";
-                    style.CharacterFormat.FontSize = 12f;
-                    style.ParagraphFormat.BeforeSpacing = 0;
-                    style.ParagraphFormat.LineSpacing = 13.8f;
-                    //Создание стиля 
-                    style = document.AddParagraphStyle("Heading 1") as WParagraphStyle;
-                    style.ApplyBaseStyle("Normal");
-                    style.CharacterFormat.FontName = "Calibri Light";
-                    style.CharacterFormat.FontSize = 16f;
-                    style.CharacterFormat.TextColor = Syncfusion.DocIO.DLS.Color.FromArgb(46, 116, 181);
-                    style.ParagraphFormat.BeforeSpacing = 12;
-                    style.ParagraphFormat.AfterSpacing = 0;
-                    style.ParagraphFormat.Keep = true;
-                    style.ParagraphFormat.KeepFollow = true;
-                    style.ParagraphFormat.OutlineLevel = OutlineLevel.Level1;
-                    //Создание параграфа
-                    IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
-                    paragraph.ApplyStyle("Normal");
-                    paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
-                    paragraph = section.AddParagraph();
-                    //Добавление картинки
-                    Stream imageStream = this.GetType().Assembly.GetManifestResourceStream("SchoolDocuments.Assets.Header.png");
-                    IWPicture picture = paragraph.AppendPicture(imageStream);
-                    picture.TextWrappingStyle = TextWrappingStyle.InFrontOfText;
-                    picture.VerticalOrigin = VerticalOrigin.Margin;
-                    picture.VerticalPosition = -45;
-                    picture.HorizontalOrigin = HorizontalOrigin.Column;
-                    picture.HorizontalPosition = 0f;
-                    picture.WidthScale = 30;
-                    picture.HeightScale = 27;
-                    paragraph = section.AddParagraph();
-                    string text = "";
-                    //Добавление текста
-                    //TemplateText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out text);
-                    //string typeName = pageHeader.Text;
-                    //string inputText = typeName + "\n" + text;
-                    //TemplateText.Document.SetText(TextSetOptions.FormatRtf, inputText);
-                    //WTextRange textRange = new WTextRange(document);
-                    //textRange = paragraph.AppendText("\n\n" + inputText) as WTextRange;
-                    //textRange.CharacterFormat.FontSize = 12f;
+                        byte[] bytes = File.ReadAllBytes(storageFolder.Path + @"\save.mod.docx");
+                        StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
 
-                    MemoryStream stream = new MemoryStream();
-                    await document.SaveAsync(stream, FormatType.Docx);
-
-                    Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                        Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                        TemplateText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                        await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                        randAccStream.Dispose();
 
 
-                    //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
-                    File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+                        Models.Template saveTemplate = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
+                        ApiWork.SaveTemplate(saveTemplate);
+                        ContentDialog errorDialog = new ContentDialog()
+                        {
+                            Title = "Успешно",
+                            Content = "Шаблон успешно обновлен",
+                            PrimaryButtonText = "Ок"
+                        };
+                        ContentDialogResult result = await errorDialog.ShowAsync();
+                        Frame.Navigate(typeof(TemplatesPage));
 
-                    StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+                    }
+                    else
+                    {
+                        //Отступы
+                        section.PageSetup.Margins.All = 72;
+                        //размер окна документа
+                        section.PageSetup.PageSize = new Syncfusion.DocIO.DLS.SizeF(612, 792);
 
-                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
-                    TemplateText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
-                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                    randAccStream.Dispose();
+                        //Создание стиля
+                        WParagraphStyle style = document.AddParagraphStyle("Normal") as WParagraphStyle;
+                        style.CharacterFormat.FontName = "Times New Roman";
+                        style.CharacterFormat.FontSize = 12f;
+                        style.ParagraphFormat.BeforeSpacing = 0;
+                        style.ParagraphFormat.LineSpacing = 13.8f;
+                        //Создание стиля 
+                        style = document.AddParagraphStyle("Heading 1") as WParagraphStyle;
+                        style.ApplyBaseStyle("Normal");
+                        style.CharacterFormat.FontName = "Calibri Light";
+                        style.CharacterFormat.FontSize = 16f;
+                        
+                        style.CharacterFormat.TextColor = Syncfusion.DocIO.DLS.Color.Black;
+                        style.ParagraphFormat.BeforeSpacing = 12;
+                        style.ParagraphFormat.AfterSpacing = 0;
+                        style.ParagraphFormat.Keep = true;
+                        style.ParagraphFormat.KeepFollow = true;
+                        style.ParagraphFormat.OutlineLevel = OutlineLevel.Level1;
+                        //Создание параграфа
+                        IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
+                        paragraph.ApplyStyle("Normal");
+                        paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+                        paragraph = section.AddParagraph();
+                        //Добавление картинки
+                        Stream imageStream = this.GetType().Assembly.GetManifestResourceStream("SchoolDocuments.Assets.Header.png");
+                        IWPicture picture = paragraph.AppendPicture(imageStream);
+                        picture.TextWrappingStyle = TextWrappingStyle.Square;
+                        picture.VerticalOrigin = VerticalOrigin.Margin;
+                        picture.VerticalPosition = -45;
+                        picture.HorizontalOrigin = HorizontalOrigin.Column;
+                        picture.HorizontalPosition = 0f;
+                        picture.WidthScale = 30;
+                        picture.HeightScale = 27;
+                        paragraph = section.AddParagraph();
+                        string inputText = "";
+                        TemplateText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out inputText);
+                        string typeName = pageHeader.Text;
+                        //TemplateText.Document.SetText(TextSetOptions.FormatRtf, inputText);
+                        WTextRange textRange = new WTextRange(document);
+                        textRange = paragraph.AppendText(inputText) as WTextRange;
+                        //textRange.CharacterFormat.FontSize = 12f;
 
-                    Models.Template template = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
-                    ApiWork.AddTemplate(template);
-                    Save(stream, "Sample.docx");
-                    //ыыыы
+                        MemoryStream stream = new MemoryStream();
+                        await document.SaveAsync(stream, FormatType.Docx);
+
+                        Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+
+
+                        //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
+                        File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+
+                        StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+
+                        Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                        TemplateText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                        await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                        randAccStream.Dispose();
+
+                        Models.Template template = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
+                        ApiWork.AddTemplate(template);
+                        Save(stream, "Sample.docx");
+                        
+                    }
                 }
             }
         }
