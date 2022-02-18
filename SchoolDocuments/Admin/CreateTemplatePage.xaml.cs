@@ -182,6 +182,7 @@ namespace SchoolDocuments.Admin
                     Models.Template template = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
                     ApiWork.AddTemplate(template);
                     Save(stream, "Sample.docx");
+                    //ыыыы
                 }
             }
         }
