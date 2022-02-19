@@ -1,4 +1,5 @@
-﻿using SchoolDocuments.Models;
+﻿
+using SchoolDocuments.Models;
 using SchoolDocuments.Moduls;
 using System;
 using System.Collections.Generic;
@@ -83,8 +84,8 @@ namespace SchoolDocuments.General
         private static bool first = true;
         private async void addsigner_Click(object sender, RoutedEventArgs e)
         {
-            string text = "";
-            DocumentText.Document.GetText(TextGetOptions.AdjustCrlf, out text);
+            string text1 = "";
+            DocumentText.Document.GetText(TextGetOptions.AdjustCrlf, out text1);
             if (first)
             {
                 //string signText = "\n\nС приказом ознакомлен(а):\n" + Signatory.SelectedValue.ToString();
@@ -96,11 +97,16 @@ namespace SchoolDocuments.General
                 //StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.rtf");
                 //string sumText = text + signText;
                 //File.WriteAllText(file.Path, sumText);
-                
+
 
                 //var randAccStream = await file.OpenAsync(FileAccessMode.Read);
                 //DocumentText.Document.LoadFromStream(TextSetOptions.CheckTextLimit, randAccStream);
                 //randAccStream.Dispose();
+                string Podp = Signatory.SelectedValue.ToString();
+                string text = "";
+                DocumentText.Document.GetText(TextGetOptions.FormatRtf, out text);
+                text += Utils.toRTF("Кирилл в говне");
+                DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
                 signerList.Add(Signatory.SelectedValue.ToString());
                 first = false;
             }
@@ -108,6 +114,11 @@ namespace SchoolDocuments.General
             {
                 //text += "\n" + Signatory.SelectedValue.ToString();
                 //DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
+                string Podp = Signatory.SelectedValue.ToString();
+                string text = "";
+                DocumentText.Document.GetText(TextGetOptions.FormatRtf, out text);
+                string textToAdd = Utils.toRTF("Кирилл в говне");
+                DocumentText.Document.SetText(TextSetOptions.FormatRtf, text.Insert(text.LastIndexOf('}') - 1, textToAdd));
                 signerList.Add(Signatory.SelectedValue.ToString());
             }
         }
@@ -171,9 +182,19 @@ namespace SchoolDocuments.General
                 await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                 randAccStream.Dispose();
 
+                string Podp = Signatory.SelectedValue.ToString();
+                string text = "";
+                DocumentText.Document.GetText(TextGetOptions.FormatRtf, out text);
+                text += Utils.toRTF(Podp);
+                DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
 
                 Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text, File.ReadAllBytes(file.Path), "", famList1, signerList1);
                 ApiWork.AddDocument(document);
+
+                //Merger merger = new Merger((Stream)randAccStream);
+                //merger.Join((Stream)randAccStream);
+
+                //merger.Save(file.Path);
             }
             else
             {
