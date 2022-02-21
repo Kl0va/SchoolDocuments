@@ -82,42 +82,22 @@ namespace SchoolDocuments.General
             }
         }
         private static bool first = true;
-        private async void addsigner_Click(object sender, RoutedEventArgs e)
+        private void addsigner_Click(object sender, RoutedEventArgs e)
         {
-            string text1 = "";
-            DocumentText.Document.GetText(TextGetOptions.AdjustCrlf, out text1);
             if (first)
             {
-                //string signText = "\n\nС приказом ознакомлен(а):\n" + Signatory.SelectedValue.ToString();
-                //DocumentText.Document.SetText(TextSetOptions.UnicodeBidi, signText);
-                //DocumentText.Document.GetText(TextGetOptions.AdjustCrlf, out signText);
-                ////signText = "\n\nС приказом ознакомлен(а):\n" + Signatory.SelectedValue.ToString();
-                //StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-                //File.Create(storageFolder.Path + @"\save.mod.rtf").Close();
-                //StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.rtf");
-                //string sumText = text + signText;
-                //File.WriteAllText(file.Path, sumText);
-
-
-                //var randAccStream = await file.OpenAsync(FileAccessMode.Read);
-                //DocumentText.Document.LoadFromStream(TextSetOptions.CheckTextLimit, randAccStream);
-                //randAccStream.Dispose();
-                string Podp = Signatory.SelectedValue.ToString();
                 string text = "";
                 DocumentText.Document.GetText(TextGetOptions.FormatRtf, out text);
-                text += Utils.toRTF("Кирилл в говне");
-                DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
+                string textToAdd = Utils.toRTF("С приказом ознакомлен(а):" + Signatory.SelectedValue.ToString());
+                DocumentText.Document.SetText(TextSetOptions.FormatRtf, text.Insert(text.LastIndexOf('}') - 1,"\n" + textToAdd));
                 signerList.Add(Signatory.SelectedValue.ToString());
                 first = false;
             }
-            else
+            else if (!first)
             {
-                //text += "\n" + Signatory.SelectedValue.ToString();
-                //DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
-                string Podp = Signatory.SelectedValue.ToString();
                 string text = "";
                 DocumentText.Document.GetText(TextGetOptions.FormatRtf, out text);
-                string textToAdd = Utils.toRTF("Кирилл в говне");
+                string textToAdd = Utils.toRTF(Signatory.SelectedValue.ToString());
                 DocumentText.Document.SetText(TextSetOptions.FormatRtf, text.Insert(text.LastIndexOf('}') - 1, textToAdd));
                 signerList.Add(Signatory.SelectedValue.ToString());
             }
@@ -149,12 +129,13 @@ namespace SchoolDocuments.General
                 DocumentText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out saveText);
                 foreach (User user1 in users)
                 {
-                    Familiarize familiarize = new Familiarize(user1.id, 0, false, DateTime.Now);
+                    
+                    Familiarize familiarize = new Familiarize(user1.id,documents1[0], false, DateTime.Now);
                     famList1.Add(familiarize);
                 }
                 foreach (User user2 in usersSig)
                 {
-                    Agreement agreement = new Agreement(user2.id, 0, TimeOfAgreement.Date.DateTime, AgreementStatus.Sent, "", DateTime.Now);
+                    Agreement agreement = new Agreement(user2.id, documents1[0], TimeOfAgreement.Date.DateTime, AgreementStatus.Sent, "", DateTime.Now);
                     signerList1.Add(agreement);
                 }
                 await userTask.ContinueWith(task =>
@@ -182,11 +163,11 @@ namespace SchoolDocuments.General
                 await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                 randAccStream.Dispose();
 
-                string Podp = Signatory.SelectedValue.ToString();
-                string text = "";
-                DocumentText.Document.GetText(TextGetOptions.FormatRtf, out text);
-                text += Utils.toRTF(Podp);
-                DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
+                //string Podp = Signatory.SelectedValue.ToString();
+                //string text = "";
+                //DocumentText.Document.GetText(TextGetOptions.FormatRtf, out text);
+                //text += Utils.toRTF(Podp);
+                //DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
 
                 Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text, File.ReadAllBytes(file.Path), "", famList1, signerList1);
                 ApiWork.AddDocument(document);

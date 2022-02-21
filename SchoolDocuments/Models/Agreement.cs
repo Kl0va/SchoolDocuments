@@ -12,7 +12,7 @@ namespace SchoolDocuments.Models
     {
         public int id { get; set; }
         public string userId { get; set; }
-        public int documentId { get; set; }
+        public Document document { get; set; }
         public DateTime deadline { get; set; }
         [JsonConverter(typeof(AgreementStatusConverter))]
         public AgreementStatus status { get; set; }
@@ -21,10 +21,10 @@ namespace SchoolDocuments.Models
         //public DateTime? statusChanged { get; set; } 
 
         [JsonConstructor]
-        public Agreement(string UserId,int DocumentId,DateTime Deadline,AgreementStatus Status,string Comment,DateTime Created)
+        public Agreement(string UserId,Document DocumentId,DateTime Deadline,AgreementStatus Status,string Comment,DateTime Created)
         {
             userId = UserId;
-            documentId = DocumentId;
+            document = DocumentId;
             deadline = Deadline;
             status = Status;
             comment = Comment;

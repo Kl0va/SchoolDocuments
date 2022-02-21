@@ -21,6 +21,15 @@ namespace SchoolDocuments.Moduls
 
             return documents;
         }
+        public static async Task<List<Models.Familiarize>> GetAllFamiliarize(string id)
+        {
+            var response = await $@"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"/{id}").AppendPathSegment("/familiarizes").GetStringAsync();
+
+            List<Models.Familiarize> documents = JsonConvert.DeserializeObject<List<Models.Familiarize>>(response);
+
+            return documents;
+        }
+
         public static async Task<List<User>> GetAllUsers()
         {
             var response = await $@"{baseUrl}".AppendPathSegment("/users").GetStringAsync();
@@ -41,5 +50,6 @@ namespace SchoolDocuments.Moduls
         public static async void AddTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PostJsonAsync(template).ReceiveString();
         public static async void SaveTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PutJsonAsync(template).ReceiveString();
         public static async void AddDocument(Document document) => await $"{baseUrl}".AppendPathSegment("/document").PostJsonAsync(document).ReceiveString();
+        public static async void SaveFam(Familiarize familiarize) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/familiarize").AppendPathSegment($"{familiarize.id}").PutJsonAsync(familiarize).ReceiveString();
     }
 }

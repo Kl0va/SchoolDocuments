@@ -18,24 +18,19 @@ using Windows.UI.Xaml.Navigation;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace SchoolDocuments.General
+namespace SchoolDocuments.Users
 {
     /// <summary>
     /// Пустая страница, которую можно использовать саму по себе или для перехода внутри фрейма.
     /// </summary>
-    public sealed partial class DocumentsPage : Page
+    public sealed partial class FamiliarizeDocuments : Page
     {
-        private static readonly List<Models.Document> documents = new List<Models.Document>();
-        private static readonly List<Models.Document> documentsSearch = new List<Models.Document>();
+        private static readonly List<Models.Familiarize> documents = new List<Models.Familiarize>();
+        private static readonly List<Models.Familiarize> documentsSearch = new List<Models.Familiarize>();
         Frame rootFrame;
-        public DocumentsPage()
+        public FamiliarizeDocuments()
         {
             this.InitializeComponent();
-        }
-
-        private void addDocument_Click(object sender, RoutedEventArgs e)
-        {
-            rootFrame.Navigate(typeof(CreateDocument));
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -43,31 +38,37 @@ namespace SchoolDocuments.General
             progress.Visibility = Visibility.Visible;
             documents.Clear();
             rootFrame = e.Parameter as Frame;
-            Task<List<Models.Document>> getDocuments = ApiWork.GetAllDocuments();
+            Task<List<Models.Familiarize>> getDocuments = ApiWork.GetAllFamiliarize(UserInfo.Id);
             await getDocuments.ContinueWith(t =>
             {
                 documents.Clear();
-                foreach (Models.Document document in getDocuments.Result)
+                foreach (Models.Familiarize document in getDocuments.Result)
                 {
                     documents.Add(document);
                 }
             });
-            documentsGrid.ItemsSource = documents;
+            var orderedDocuments = from p in documents orderby p.familiarized select p;
+            documentsGrid.ItemsSource = orderedDocuments;
             progress.Visibility = Visibility.Collapsed;
         }
 
         private void search_TextChanged(object sender, TextChangedEventArgs e)
         {
             documentsSearch.Clear();
-            foreach (Document document in documents)
+            foreach (Familiarize template in documents)
             {
-                if (document.title.Contains(search.Text))
+                if (template.document.title.Contains(search.Text))
                 {
-                    documentsSearch.Add(document);
+                    documentsSearch.Add(template);
                 }
             }
             documentsGrid.ItemsSource = null;
             documentsGrid.ItemsSource = documentsSearch;
+        }
+
+        private void documentsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            rootFrame.Navigate(typeof(CheckFamiliarizeDocument), (Familiarize)documentsGrid.SelectedItem);
         }
     }
 }

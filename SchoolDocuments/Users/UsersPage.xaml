@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Center" Name="pageHeader" Text="Документы" VerticalAlignment="Center" FontSize="34" />
+        <TextBlock HorizontalAlignment="Center" Name="pageHeader" Text="На ознакомление" VerticalAlignment="Center" FontSize="34" />
         <Button x:Name="Settings" FontFamily="Segoe MDL2 Assets" FontSize="28"
                     Content="&#xE713;" Width="47" Margin="0,0,0,2" VerticalAlignment="Center" HorizontalAlignment="Right" Click="Settings_Click"/>
 
@@ -25,7 +25,7 @@
                     <ListBoxItem Name="documents">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontSize="28" FontFamily="Segoe MDL2 Assets" Text="&#xe9f9;" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                            <TextBlock FontSize="24" Text="Документы" TextWrapping="Wrap" Margin="10,0,0,0"/>
+                            <TextBlock FontSize="20" Text="На ознакомление" TextWrapping="Wrap" Margin="10,0,0,0"/>
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>

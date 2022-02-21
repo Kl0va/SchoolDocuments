@@ -57,8 +57,8 @@ namespace SchoolDocuments.Users
 
         public void NavigateDocuments()
         {
-            myFrame.Navigate(typeof(DocumentsPage), Frame);
-            pageHeader.Text = "Документы";
+            myFrame.Navigate(typeof(FamiliarizeDocuments), Frame);
+            pageHeader.Text = "На ознакомление";
         }
     }
 }

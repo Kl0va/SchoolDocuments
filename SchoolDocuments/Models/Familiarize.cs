@@ -11,15 +11,15 @@ namespace SchoolDocuments.Models
     {
         public int id { get; set; }
         public string userId { get; set; }
-        public int documentId { get; set; }
+        public Document document { get; set; }
         public bool familiarized { get; set; }
         public DateTime created { get; set; }
 
         [JsonConstructor]
-        public Familiarize(string UserId,int DocumentId,bool Familiarized,DateTime Created)
+        public Familiarize(string UserId,Document DocumentId,bool Familiarized,DateTime Created)
         {
             userId = UserId;
-            documentId = DocumentId;
+            document = DocumentId;
             familiarized = Familiarized;
             created = Created;
         }

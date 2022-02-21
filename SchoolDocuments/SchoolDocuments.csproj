@@ -129,6 +129,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\AgreementStatusConverter.cs" />
+    <Compile Include="Converters\BoolConverter.cs" />
     <Compile Include="Converters\BytesConverter.cs" />
     <Compile Include="General\CreateDocument.xaml.cs">
       <DependentUpon>CreateDocument.xaml</DependentUpon>
@@ -153,6 +154,12 @@
     <Compile Include="Moduls\UserInfo.cs" />
     <Compile Include="Moduls\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Users\CheckFamiliarizeDocument.xaml.cs">
+      <DependentUpon>CheckFamiliarizeDocument.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Users\FamiliarizeDocuments.xaml.cs">
+      <DependentUpon>FamiliarizeDocuments.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Users\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -207,6 +214,14 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Users\CheckFamiliarizeDocument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Users\FamiliarizeDocuments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Users\SettingsPage.xaml">
       <SubType>Designer</SubType>
