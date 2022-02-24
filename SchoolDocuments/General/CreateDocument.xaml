@@ -58,13 +58,17 @@
                         <ColumnDefinition Width="0.3*"/>
                     </Grid.ColumnDefinitions>
                     <ComboBox HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="42" Width="429" x:Name="Template" SelectionChanged="Template_SelectionChanged"></ComboBox>
-                    <ComboBox x:Name="Signatory" Height="42" Width="429" Margin="0,15,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                    <ComboBox x:Name="Signatory" Height="42" Width="429" Margin="0,15,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" SelectionChanged="Signatory_SelectionChanged">
                     </ComboBox>
                 </Grid>
                 <DatePicker x:Name="TimeOfAgreement" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="429" Margin="0,166,0,0"/>
                 <TextBlock Grid.Row="0" Text="Срок" FontSize="32" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="70"></TextBlock>
+                <TextBlock x:Name="agreedStatus" Grid.Row="1" Text="test" FontSize="32" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="70" Visibility="Collapsed"></TextBlock>
                 <ComboBox x:Name="familiarize" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="42" Width="429" Margin="0,100,0,0"></ComboBox>
                 <Button x:Name="add_fam" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="50" CornerRadius="10" Width="230" FontSize="16" Click="add_fam_Click">Добавить на ознакомление</Button>
+                <ComboBox x:Name="Agreement" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="429" Height="42" SelectionChanged="Agreement_SelectionChanged"/>
+                <Button x:Name="add_agreed" Grid.Row="4" Height="50" CornerRadius="10" Width="230" FontSize="16"  Content="Добавить на согласование" Margin="109,0,0,0" Click="add_agreed_Click"/>
+                <TextBlock x:Name="Comment" Grid.Row="4" Height="80" Width="430" FontSize="20" Visibility="Collapsed">test</TextBlock>
             </Grid>
         </Grid>
     </Grid>

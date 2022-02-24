@@ -21,11 +21,20 @@ namespace SchoolDocuments.Moduls
 
             return documents;
         }
+        
         public static async Task<List<Models.Familiarize>> GetAllFamiliarize(string id)
         {
             var response = await $@"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"/{id}").AppendPathSegment("/familiarizes").GetStringAsync();
 
             List<Models.Familiarize> documents = JsonConvert.DeserializeObject<List<Models.Familiarize>>(response);
+
+            return documents;
+        }
+        public static async Task<List<Models.Agreement>> GetAllAgreements(string id)
+        {
+            var response = await $@"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"/{id}").AppendPathSegment("/agreements").GetStringAsync();
+
+            List<Models.Agreement> documents = JsonConvert.DeserializeObject<List<Models.Agreement>>(response);
 
             return documents;
         }
@@ -51,5 +60,7 @@ namespace SchoolDocuments.Moduls
         public static async void SaveTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PutJsonAsync(template).ReceiveString();
         public static async void AddDocument(Document document) => await $"{baseUrl}".AppendPathSegment("/document").PostJsonAsync(document).ReceiveString();
         public static async void SaveFam(Familiarize familiarize) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/familiarize").AppendPathSegment($"{familiarize.id}").PutJsonAsync(familiarize).ReceiveString();
+        public static async void SaveAgreementWithout(Agreement agreement) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/agreement").AppendPathSegment($"{agreement.id}").PutJsonAsync(agreement.status).ReceiveString();
+        public static async void SaveAgreementWith(Agreement agreement) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/agreement").AppendPathSegment($"{agreement.id}").SetQueryParam($"comment={agreement.comment}").PutJsonAsync(agreement.status).ReceiveString();
     }
 }

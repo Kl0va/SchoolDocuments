@@ -53,12 +53,21 @@ namespace SchoolDocuments.Users
             {
                 NavigateDocuments();
             }
+            else if (Agreed.IsSelected)
+            {
+                NavigateAgreement();
+            }
         }
 
         public void NavigateDocuments()
         {
             myFrame.Navigate(typeof(FamiliarizeDocuments), Frame);
             pageHeader.Text = "На ознакомление";
+        }
+        public void NavigateAgreement()
+        {
+            myFrame.Navigate(typeof(AgreeDocuments), Frame);
+            pageHeader.Text = "Согласование/подписание";
         }
     }
 }

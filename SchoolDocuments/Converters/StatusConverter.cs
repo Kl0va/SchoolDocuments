@@ -8,13 +8,13 @@ using Windows.UI.Xaml.Data;
 
 namespace SchoolDocuments.Converters
 {
-    class BoolConverter : IValueConverter
+    class StatusConverter : IValueConverter
     {
-        const string familiarized = "Ознакомлен";
-        const string notFamiliarized = "Не ознакомлен";
+        const string familiarized = "Не согласовано";
+        const string notFamiliarized = "Согласовано";
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if ((bool)value)
+            if ((AgreementStatus)value == AgreementStatus.Sent || (AgreementStatus)value == AgreementStatus.Declined)
                 return familiarized;
             else return notFamiliarized;
         }

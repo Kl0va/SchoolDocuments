@@ -14,7 +14,7 @@ namespace SchoolDocuments.Models
         public string userId { get; set; }
         public Document document { get; set; }
         public DateTime deadline { get; set; }
-        [JsonConverter(typeof(AgreementStatusConverter))]
+        
         public AgreementStatus status { get; set; }
         public string comment { get; set; }
         public  DateTime created { get; set; } 

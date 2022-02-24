@@ -1,13 +1,16 @@
 ﻿<Page
-    x:Class="SchoolDocuments.General.DocumentsPage"
+    x:Class="SchoolDocuments.Users.AgreeDocuments"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SchoolDocuments.General"
+    xmlns:local="using:SchoolDocuments.Users"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:SchoolDocuments.Converters"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <local1:StatusConverter x:Key="familiarizeConverter" />
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"/>
@@ -28,17 +31,14 @@
                 <TextBox CornerRadius="10" Grid.Column="0" PlaceholderText="Поиск" x:Name="search" VerticalAlignment="Center" TextChanged="search_TextChanged" />
 
             </Grid>
-            <Button CornerRadius="10" x:Name="addDocument"  HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Click="addDocument_Click">
-                <StackPanel>
-                    <TextBlock HorizontalAlignment="Center" Text="&#xE710;" FontFamily="Segoe MDL2 Assets" ></TextBlock>
-                    <TextBlock>Добавить документ</TextBlock>
-                </StackPanel>
-            </Button>
         </Grid>
 
         <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-            <GridView x:Name="documentsGrid"  HorizontalAlignment="Stretch" Margin="100,0,100,100" SelectionChanged="documentsGrid_SelectionChanged">
+            <GridView x:Name="documentsGrid" Margin="100,0,100,100" SelectionChanged="documentsGrid_SelectionChanged">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" Margin="10" Width="250"  BorderThickness="2" BorderBrush="Gray" CornerRadius="10">
@@ -46,8 +46,8 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding title}" Grid.Row="0" FontSize="25" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding author.secondName}" Grid.Row="1" FontSize="25" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding document.title}" Grid.Row="0" FontSize="25" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding status, Converter={StaticResource familiarizeConverter}}" Grid.Row="1" FontSize="25" HorizontalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>
