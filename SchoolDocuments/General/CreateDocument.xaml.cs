@@ -50,6 +50,7 @@ namespace SchoolDocuments.General
         private static readonly List<Models.Document> documents1 = new List<Models.Document>();
         public async void Load()
         {
+            Agreement.Items.Clear();
             Task<List<User>> userTask = ApiWork.GetAllUsers();
             await userTask.ContinueWith(task =>
             {
@@ -77,11 +78,14 @@ namespace SchoolDocuments.General
             {
                 FIO.Add(user1.firstName + " " + user1.secondName + " " + user1.middleName);
             }
-            foreach (string fio in FIO)
+            if (!saving)
             {
-                Signatory.Items.Add(fio);
-                familiarize.Items.Add(fio);
-                Agreement.Items.Add(fio);
+                foreach (string fio in FIO)
+                {
+                    Signatory.Items.Add(fio);
+                    familiarize.Items.Add(fio);
+                    Agreement.Items.Add(fio);
+                }
             }
         }
         private static bool first = true;
@@ -122,7 +126,22 @@ namespace SchoolDocuments.General
         private static readonly List<Models.Template> templates1 = new List<Models.Template>();
         private async void save_Click(object sender, RoutedEventArgs e)
         {
-            if (Template.SelectedValue.ToString() != "")
+            if (saving)
+            {
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
+                File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+
+                StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+
+                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                randAccStream.Dispose();
+                documentForSave.file = File.ReadAllBytes(file.Path);
+                ApiWork.SaveDocument(documentForSave);
+            }
+            else if (Template.SelectedValue.ToString() != "")
             {
                 Task<List<User>> userTask = ApiWork.GetAllUsers();
                 await userTask.ContinueWith(task =>
@@ -167,8 +186,6 @@ namespace SchoolDocuments.General
                 });
 
                 Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-
-
                 //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
                 File.Create(storageFolder.Path + @"\save.mod.docx").Close();
 
@@ -179,19 +196,8 @@ namespace SchoolDocuments.General
                 await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                 randAccStream.Dispose();
 
-                //string Podp = Signatory.SelectedValue.ToString();
-                //string text = "";
-                //DocumentText.Document.GetText(TextGetOptions.FormatRtf, out text);
-                //text += Utils.toRTF(Podp);
-                //DocumentText.Document.SetText(TextSetOptions.FormatRtf, text);
-
                 Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text, File.ReadAllBytes(file.Path), "", famList1, signerList1);
                 ApiWork.AddDocument(document);
-
-                //Merger merger = new Merger((Stream)randAccStream);
-                //merger.Join((Stream)randAccStream);
-
-                //merger.Save(file.Path);
             }
             else
             {
@@ -267,11 +273,18 @@ namespace SchoolDocuments.General
             }
         }
         private static Document document2;
+        private static List<string> fios = new List<string>();
+        private static List<Agreement> agreements = new List<Agreement>();
+        private static List<Familiarize> familiarizes = new List<Familiarize>();
+        private static Document documentForSave;
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
                 Models.Document template = e.Parameter as Models.Document;
+                documentForSave = e.Parameter as Models.Document;
+                agreements = template.agreement;
+                familiarizes = template.familiarize;
                 document2 = e.Parameter as Document;
                 Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
@@ -283,18 +296,35 @@ namespace SchoolDocuments.General
                 pageHeader.Text = template.title;
                 saving = true;
 
-                Template.IsEnabled = false;
-                TimeOfAgreement.IsEnabled = false;
-                Signatory.IsEnabled = false;
-                familiarize.IsEnabled = false;
-                add_fam.IsEnabled = false;
+                Template.Visibility = Visibility.Collapsed;
+                TimeOfAgreement.Visibility = Visibility.Collapsed;
+                Signatory.Visibility = Visibility.Collapsed;
+                familiarize.Visibility = Visibility.Collapsed;
+                add_fam.Visibility = Visibility.Collapsed;
                 addsigner.Visibility = Visibility.Collapsed;
+                add_agreed.Visibility = Visibility.Collapsed;
+                time.Visibility = Visibility.Collapsed;
+                Comment.Visibility = Visibility.Visible;
+
+                Agreement.Items.Clear();
+                foreach (Agreement agreement in agreements)
+                {
+                    Task<User> userTask = ApiWork.GetUserInfo(agreement.userId);
+                    await userTask.ContinueWith(task =>
+                    {
+                        fios.Add(userTask.Result.firstName + " " + userTask.Result.secondName + " " + userTask.Result.middleName);
+                    });
+                }
+                foreach (string fio in fios)
+                {
+                    Agreement.Items.Add(fio);
+                }
             }
         }
-        private static List<Agreement> agreements = new List<Agreement>();
+
         private void Signatory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
 
         private async void Agreement_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -304,54 +334,49 @@ namespace SchoolDocuments.General
                 agreedStatus.Visibility = Visibility.Visible;
                 Comment.Visibility = Visibility.Visible;
                 string sign = Agreement.SelectedValue.ToString();
-                Task<List<User>> userTask = ApiWork.GetAllUsers();
-                await userTask.ContinueWith(task =>
+                foreach (Agreement agreement in agreements)
                 {
-                    usersSig.Clear();
-                    foreach (User user in userTask.Result)
+                    Task<User> userTask = ApiWork.GetUserInfo(agreement.userId);
+                    await userTask.ContinueWith(task =>
                     {
-                        if (sign.Contains(user.firstName + " " + user.secondName + " " + user.middleName))
+                        usersSig.Clear();
+                        if (sign.Contains(userTask.Result.firstName + " " + userTask.Result.secondName + " " + userTask.Result.middleName))
                         {
-                            usersSig.Add(user);
+                            usersSig.Add(userTask.Result);
                         }
-                    }
-                });
-                foreach (User user1 in usersSig)
-                {
-                    if (Agreement.SelectedValue.ToString().Contains(user1.firstName + " " + user1.secondName + " " + user1.middleName))
+                    });
+                    if (usersSig.Count >= 1)
                     {
-                        Task<List<Models.Agreement>> getDocuments = ApiWork.GetAllAgreements(UserInfo.Id);
-                        await getDocuments.ContinueWith(t =>
+                        foreach (User user1 in usersSig)
                         {
-                            agreements.Clear();
-                            foreach (Models.Agreement document in getDocuments.Result)
+                            if (sign == user1.firstName + " " + user1.secondName + " " + user1.middleName)
                             {
-                                agreements.Add(document);
+                                if (agreement.status.ToString() == "Sent")
+                                {
+                                    agreedStatus.Text = "Отправлено";
+                                }
+                                else if (agreement.status.ToString() == "Declined")
+                                {
+                                    agreedStatus.Text = "Отклонено";
+                                }
+                                else if (agreement.status.ToString() == "Agreed")
+                                {
+                                    agreedStatus.Text = "Одобрено";
+                                }
                             }
-                        });
+                        }
                     }
-                    foreach (Agreement agreement in agreements)
+                    else
                     {
-                        if (agreement.status.ToString() == "Sent")
-                        {
-                            agreedStatus.Text = "Отправлено";
-                        }
-                        else if (agreement.status.ToString() == "Declined")
-                        {
-                            agreedStatus.Text = "Отклонено";
-                        }
-                        else if (agreement.status.ToString() == "Accepted")
-                        {
-                            agreedStatus.Text = "Одобрено";
-                        }
-                        else
-                        {
-                            agreedStatus.Text = "Не отправлено";
-                        }
-                        if (agreement.comment != "" && agreement.comment != null)
-                        {
-                            Comment.Text = agreement.comment;
-                        }
+                        agreedStatus.Text = "Не отправлено";
+                    }
+                    if (agreement.comment != "" && agreement.comment != null)
+                    {
+                        Comment.Text = agreement.comment;
+                    }
+                    else
+                    {
+                        Comment.Text = "Комментария не было оставлено";
                     }
                 }
             }

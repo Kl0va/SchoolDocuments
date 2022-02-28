@@ -57,6 +57,10 @@ namespace SchoolDocuments.Users
             {
                 NavigateAgreement();
             }
+            else if (document.IsSelected)
+            {
+                NavigateDoc();
+            }
         }
 
         public void NavigateDocuments()
@@ -68,6 +72,11 @@ namespace SchoolDocuments.Users
         {
             myFrame.Navigate(typeof(AgreeDocuments), Frame);
             pageHeader.Text = "Согласование/подписание";
+        }
+        public void NavigateDoc()
+        {
+            myFrame.Navigate(typeof(DocumentsPage), Frame);
+            pageHeader.Text = "Документы";
         }
     }
 }

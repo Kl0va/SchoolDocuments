@@ -47,6 +47,15 @@ namespace SchoolDocuments.Moduls
 
             return documents;
         }
+        public static async Task<User> GetUserInfo(string id)
+        {
+            var response = await $@"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"/{id}").GetStringAsync();
+
+            User documents = JsonConvert.DeserializeObject<User>(response);
+
+            return documents;
+        }
+        
         public static async Task<List<Template>> GetAllTemplates()
         {
             var response = await $@"{baseUrl}".AppendPathSegment("/template").GetStringAsync();
@@ -59,7 +68,9 @@ namespace SchoolDocuments.Moduls
         public static async void AddTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PostJsonAsync(template).ReceiveString();
         public static async void SaveTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PutJsonAsync(template).ReceiveString();
         public static async void AddDocument(Document document) => await $"{baseUrl}".AppendPathSegment("/document").PostJsonAsync(document).ReceiveString();
+        public static async void SaveDocument(Document document) => await $"{baseUrl}".AppendPathSegment("/document").PutJsonAsync(document).ReceiveString();
         public static async void SaveFam(Familiarize familiarize) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/familiarize").AppendPathSegment($"{familiarize.id}").PutJsonAsync(familiarize).ReceiveString();
+        public static async void SaveFamList(List<int> familiarize) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/familiarize").PutJsonAsync(familiarize).ReceiveString();
         public static async void SaveAgreementWithout(Agreement agreement) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/agreement").AppendPathSegment($"{agreement.id}").PutJsonAsync(agreement.status).ReceiveString();
         public static async void SaveAgreementWith(Agreement agreement) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/agreement").AppendPathSegment($"{agreement.id}").SetQueryParam($"comment={agreement.comment}").PutJsonAsync(agreement.status).ReceiveString();
     }
