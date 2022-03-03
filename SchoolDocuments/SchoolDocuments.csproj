@@ -122,6 +122,9 @@
     <Compile Include="Admin\CreateTemplatePage.xaml.cs">
       <DependentUpon>CreateTemplatePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Admin\RolesPage.xaml.cs">
+      <DependentUpon>RolesPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Admin\TemplatesPage.xaml.cs">
       <DependentUpon>TemplatesPage.xaml</DependentUpon>
     </Compile>
@@ -131,6 +134,7 @@
     <Compile Include="Converters\AgreementStatusConverter.cs" />
     <Compile Include="Converters\BoolConverter.cs" />
     <Compile Include="Converters\BytesConverter.cs" />
+    <Compile Include="Converters\RoleConverter.cs" />
     <Compile Include="Converters\StatusConverter.cs" />
     <Compile Include="General\CreateDocument.xaml.cs">
       <DependentUpon>CreateDocument.xaml</DependentUpon>
@@ -203,6 +207,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Admin\CreateTemplatePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Admin\RolesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

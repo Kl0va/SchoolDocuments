@@ -66,6 +66,7 @@ namespace SchoolDocuments.Moduls
         }
 
         public static async void AddTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PostJsonAsync(template).ReceiveString();
+        public static async void SaveRole(User user,Role role) => await $"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"{user.id}").PutJsonAsync(role).ReceiveString();
         public static async void SaveTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PutJsonAsync(template).ReceiveString();
         public static async void AddDocument(Document document) => await $"{baseUrl}".AppendPathSegment("/document").PostJsonAsync(document).ReceiveString();
         public static async void SaveDocument(Document document) => await $"{baseUrl}".AppendPathSegment("/document").PutJsonAsync(document).ReceiveString();

@@ -26,6 +26,7 @@ using Newtonsoft.Json.Linq;
 using SchoolDocuments.Users;
 using Windows.UI.Xaml.Media.Imaging;
 using SchoolDocuments.Moduls;
+using System.Threading.Tasks;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -58,7 +59,6 @@ namespace SchoolDocuments
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            //Frame.Navigate(typeof(Users.UsersPage), Email.Text);
 
             // Generates state and PKCE values.
             string state = randomDataBase64url(32);
@@ -203,7 +203,36 @@ namespace SchoolDocuments
 
             JObject js = JObject.Parse(userinfoResponseContent);
             UserInfo.Id = js.Value<string>("sub");
-            Frame.Navigate(typeof(Users.UsersPage));
+
+            Task<Models.User> getDocuments = ApiWork.GetUserInfo(UserInfo.Id);
+            await getDocuments.ContinueWith(t =>
+            {
+                UserInfo.user = getDocuments.Result;
+            });
+
+            if (UserInfo.user.role == "Admin")
+            {
+                ContentDialog errorDialog = new ContentDialog()
+                {
+                    Title = "Выбор",
+                    Content = "Выберите, кем авторизоваться",
+                    PrimaryButtonText = "Администратор",
+                    SecondaryButtonText = "Сотрудник"
+                };
+                ContentDialogResult result = await errorDialog.ShowAsync();
+                if(result == ContentDialogResult.Primary)
+                {
+                    Frame.Navigate(typeof(AdminPage));
+                }
+                else if (result == ContentDialogResult.Secondary)
+                {
+                    Frame.Navigate(typeof(Users.UsersPage));
+                }
+            }
+            else if (UserInfo.user.role == "Employee")
+            {
+                Frame.Navigate(typeof(Users.UsersPage));
+            }
             output(userinfoResponseContent);
         }
 

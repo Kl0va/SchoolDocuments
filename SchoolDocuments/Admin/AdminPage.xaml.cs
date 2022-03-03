@@ -38,6 +38,10 @@ namespace SchoolDocuments.Admin
             {
                 NavigateTemplates();
             }
+            else if (roles.IsSelected)
+            {
+                NavigateRoles();
+            }
         }
 
         private void NavigateDocuments()
@@ -50,6 +54,11 @@ namespace SchoolDocuments.Admin
         {
             myFrame.Navigate(typeof(TemplatesPage), Frame);
             pageHeader.Text = "Шаблоны документов";
+        }
+        private void NavigateRoles()
+        {
+            myFrame.Navigate(typeof(RolesPage), Frame);
+            pageHeader.Text = "Роли сотрудников";
         }
 
 

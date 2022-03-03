@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SchoolDocuments.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace SchoolDocuments.Moduls
 {
     class UserInfo
     {
+        public static User user { get; set; }
         public static string Email { get; set; }
         public static string Id { get; set; }
     }
