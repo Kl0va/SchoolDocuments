@@ -14,8 +14,8 @@ namespace SchoolDocuments.Models
         public string desc { get; set; }
         public DateTime created { get; set; }
         public DateTime deadline { get; set; }
-        public User authorId { get; set; }
-        public List<Performer> performers { get; set; }
+        public User author { get; set; }
+        public List<Performer> performs { get; set; }
 
         [JsonConstructor]
         public Task(string Title,string Desc,DateTime Created,DateTime Deadline,User AuthorId,List<Performer> Performers)
@@ -24,8 +24,8 @@ namespace SchoolDocuments.Models
             desc = Desc;
             created = Created;
             deadline = Deadline;
-            authorId = AuthorId;
-            performers = Performers;
+            author = AuthorId;
+            performs = Performers;
         }
     }
 }

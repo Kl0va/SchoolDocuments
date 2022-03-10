@@ -38,6 +38,14 @@ namespace SchoolDocuments.Moduls
 
             return documents;
         }
+        public static async Task<List<Models.Task>> GetGivenTasks(string id)
+        {
+            var response = await $@"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"/{id}").AppendPathSegment("/tasks").AppendPathSegment("/given").GetStringAsync();
+
+            List<Models.Task> documents = JsonConvert.DeserializeObject<List<Models.Task>>(response);
+
+            return documents;
+        }
 
         public static async Task<List<User>> GetAllUsers()
         {
@@ -66,6 +74,7 @@ namespace SchoolDocuments.Moduls
         }
 
         public static async void AddTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PostJsonAsync(template).ReceiveString();
+        public static async void AddTask(Models.Task task) => await $"{baseUrl}".AppendPathSegment("/task").PostJsonAsync(task).ReceiveString();
         public static async void SaveRole(User user,Role role) => await $"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"{user.id}").PutJsonAsync(role).ReceiveString();
         public static async void SaveTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PutJsonAsync(template).ReceiveString();
         public static async void AddDocument(Document document) => await $"{baseUrl}".AppendPathSegment("/document").PostJsonAsync(document).ReceiveString();

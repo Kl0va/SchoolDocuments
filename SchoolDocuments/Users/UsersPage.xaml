@@ -37,8 +37,14 @@
                     </ListBoxItem>
                     <ListBoxItem Name="document">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontSize="28" FontFamily="Segoe MDL2 Assets" Text="&#xE929;" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                            <TextBlock FontSize="13" Text="Согласование/подписание" TextWrapping="Wrap" Margin="10,0,0,0"/>
+                            <TextBlock FontSize="28" FontFamily="Segoe MDL2 Assets" Text="&#xE82D;" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                            <TextBlock FontSize="13" Text="Документы" TextWrapping="Wrap" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    <ListBoxItem Name="task">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="28" FontFamily="Segoe MDL2 Assets" Text="&#xEE64;" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                            <TextBlock FontSize="13" Text="Задания" TextWrapping="Wrap" Margin="10,0,0,0"/>
                         </StackPanel>
                     </ListBoxItem>
                 </ListBox>

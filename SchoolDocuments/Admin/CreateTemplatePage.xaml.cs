@@ -119,73 +119,77 @@ namespace SchoolDocuments.Admin
                     }
                     else
                     {
-                        //Отступы
-                        section.PageSetup.Margins.All = 72;
-                        //размер окна документа
-                        section.PageSetup.PageSize = new Syncfusion.DocIO.DLS.SizeF(612, 792);
+                        if (pageHeader.Text != "" && pageHeader.Text != null)
+                        {
+                            //Отступы
+                            section.PageSetup.Margins.All = 72;
+                            //размер окна документа
+                            section.PageSetup.PageSize = new Syncfusion.DocIO.DLS.SizeF(612, 792);
 
-                        //Создание стиля
-                        WParagraphStyle style = document.AddParagraphStyle("Normal") as WParagraphStyle;
-                        style.CharacterFormat.FontName = "Times New Roman";
-                        style.CharacterFormat.FontSize = 12f;
-                        style.ParagraphFormat.BeforeSpacing = 0;
-                        style.ParagraphFormat.LineSpacing = 13.8f;
-                        //Создание стиля 
-                        style = document.AddParagraphStyle("Heading 1") as WParagraphStyle;
-                        style.ApplyBaseStyle("Normal");
-                        style.CharacterFormat.FontName = "Calibri Light";
-                        style.CharacterFormat.FontSize = 16f;
-                        
-                        style.CharacterFormat.TextColor = Syncfusion.DocIO.DLS.Color.Black;
-                        style.ParagraphFormat.BeforeSpacing = 12;
-                        style.ParagraphFormat.AfterSpacing = 0;
-                        style.ParagraphFormat.Keep = true;
-                        style.ParagraphFormat.KeepFollow = true;
-                        style.ParagraphFormat.OutlineLevel = OutlineLevel.Level1;
-                        //Создание параграфа
-                        IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
-                        paragraph.ApplyStyle("Normal");
-                        paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
-                        paragraph = section.AddParagraph();
-                        //Добавление картинки
-                        Stream imageStream = this.GetType().Assembly.GetManifestResourceStream("SchoolDocuments.Assets.Header.png");
-                        IWPicture picture = paragraph.AppendPicture(imageStream);
-                        picture.TextWrappingStyle = TextWrappingStyle.Square;
-                        picture.VerticalOrigin = VerticalOrigin.Margin;
-                        picture.VerticalPosition = -45;
-                        picture.HorizontalOrigin = HorizontalOrigin.Column;
-                        picture.HorizontalPosition = 0f;
-                        picture.WidthScale = 30;
-                        picture.HeightScale = 27;
-                        paragraph = section.AddParagraph();
-                        string inputText = "";
-                        TemplateText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out inputText);
-                        string typeName = pageHeader.Text;
-                        //TemplateText.Document.SetText(TextSetOptions.FormatRtf, inputText);
-                        WTextRange textRange = new WTextRange(document);
-                        textRange = paragraph.AppendText(inputText) as WTextRange;
-                        //textRange.CharacterFormat.FontSize = 12f;
+                            //Создание стиля
+                            WParagraphStyle style = document.AddParagraphStyle("Normal") as WParagraphStyle;
+                            style.CharacterFormat.FontName = "Times New Roman";
+                            style.CharacterFormat.FontSize = 12f;
+                            style.ParagraphFormat.BeforeSpacing = 0;
+                            style.ParagraphFormat.LineSpacing = 13.8f;
+                            //Создание стиля 
+                            style = document.AddParagraphStyle("Heading 1") as WParagraphStyle;
+                            style.ApplyBaseStyle("Normal");
+                            style.CharacterFormat.FontName = "Calibri Light";
+                            style.CharacterFormat.FontSize = 16f;
 
-                        MemoryStream stream = new MemoryStream();
-                        await document.SaveAsync(stream, FormatType.Docx);
+                            style.CharacterFormat.TextColor = Syncfusion.DocIO.DLS.Color.Black;
+                            style.ParagraphFormat.BeforeSpacing = 12;
+                            style.ParagraphFormat.AfterSpacing = 0;
+                            style.ParagraphFormat.Keep = true;
+                            style.ParagraphFormat.KeepFollow = true;
+                            style.ParagraphFormat.OutlineLevel = OutlineLevel.Level1;
+                            //Создание параграфа
+                            IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
+                            paragraph.ApplyStyle("Normal");
+                            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+                            paragraph = section.AddParagraph();
+                            //Добавление картинки
+                            Stream imageStream = this.GetType().Assembly.GetManifestResourceStream("SchoolDocuments.Assets.Header.png");
+                            IWPicture picture = paragraph.AppendPicture(imageStream);
+                            picture.TextWrappingStyle = TextWrappingStyle.Square;
+                            picture.VerticalOrigin = VerticalOrigin.Margin;
+                            picture.VerticalPosition = -45;
+                            picture.HorizontalOrigin = HorizontalOrigin.Column;
+                            picture.HorizontalPosition = 0f;
+                            picture.WidthScale = 30;
+                            picture.HeightScale = 27;
+                            paragraph = section.AddParagraph();
+                            string inputText = "";
+                            TemplateText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out inputText);
+                            string typeName = pageHeader.Text;
+                            //TemplateText.Document.SetText(TextSetOptions.FormatRtf, inputText);
+                            WTextRange textRange = new WTextRange(document);
+                            textRange = paragraph.AppendText(inputText) as WTextRange;
+                            //textRange.CharacterFormat.FontSize = 12f;
 
-                        Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                            MemoryStream stream = new MemoryStream();
+                            await document.SaveAsync(stream, FormatType.Docx);
+                            
+
+                            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
 
-                        //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
-                        File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+                            //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
+                            File.Create(storageFolder.Path + @"\save.mod.docx").Close();
 
-                        StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+                            StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
 
-                        Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
-                        TemplateText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
-                        await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                        randAccStream.Dispose();
+                            Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                            TemplateText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                            await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                            randAccStream.Dispose();
 
-                        Models.Template template = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
-                        ApiWork.AddTemplate(template);
-                        Save(stream, "Sample.docx");
-                        
+                            Models.Template template = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
+                            ApiWork.AddTemplate(template);
+                            Save(stream, "Sample.docx");
+                            Frame.Navigate(typeof(AdminPage));
+                        }
                     }
                 }
             }

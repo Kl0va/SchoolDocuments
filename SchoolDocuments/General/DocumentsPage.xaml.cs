@@ -68,15 +68,22 @@ namespace SchoolDocuments.General
         private void search_TextChanged(object sender, TextChangedEventArgs e)
         {
             documentsSearch.Clear();
-            foreach (Document document in documents)
+            if (search.Text == "")
             {
-                if (document.title.Contains(search.Text))
-                {
-                    documentsSearch.Add(document);
-                }
+                documentsGrid.ItemsSource = documentsforAdd;
             }
-            documentsGrid.ItemsSource = null;
-            documentsGrid.ItemsSource = documentsSearch;
+            else
+            {
+                foreach (Document document in documentsforAdd)
+                {
+                    if (document.title.Contains(search.Text))
+                    {
+                        documentsSearch.Add(document);
+                    }
+                }
+                documentsGrid.ItemsSource = null;
+                documentsGrid.ItemsSource = documentsSearch;
+            }
         }
 
         private void documentsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)

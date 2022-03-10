@@ -134,6 +134,8 @@
     <Compile Include="Converters\AgreementStatusConverter.cs" />
     <Compile Include="Converters\BoolConverter.cs" />
     <Compile Include="Converters\BytesConverter.cs" />
+    <Compile Include="Converters\PerformerStatusConverter.cs" />
+    <Compile Include="Converters\PerformStatusConv.cs" />
     <Compile Include="Converters\RoleConverter.cs" />
     <Compile Include="Converters\StatusConverter.cs" />
     <Compile Include="General\CreateDocument.xaml.cs">
@@ -168,11 +170,17 @@
     <Compile Include="Users\CheckFamiliarizeDocument.xaml.cs">
       <DependentUpon>CheckFamiliarizeDocument.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Users\CreateTask.xaml.cs">
+      <DependentUpon>CreateTask.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Users\FamiliarizeDocuments.xaml.cs">
       <DependentUpon>FamiliarizeDocuments.xaml</DependentUpon>
     </Compile>
     <Compile Include="Users\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Users\Task.xaml.cs">
+      <DependentUpon>Task.xaml</DependentUpon>
     </Compile>
     <Compile Include="Users\UsersPage.xaml.cs">
       <DependentUpon>UsersPage.xaml</DependentUpon>
@@ -242,11 +250,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Users\CreateTask.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Users\FamiliarizeDocuments.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Users\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Users\Task.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -262,8 +278,14 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.12</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp">
+      <Version>7.1.2</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="PSPDFKitUWP">
+      <Version>2.11.2</Version>
     </PackageReference>
     <PackageReference Include="Syncfusion.DocIO.UWP">
       <Version>19.4.0.48</Version>

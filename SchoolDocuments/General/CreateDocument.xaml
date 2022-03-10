@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SchoolDocuments.General"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:ui="using:PSPDFKit.UI"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -13,6 +13,7 @@
             <RowDefinition Height="0.1*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <StackPanel x:Name="Panel" Grid.Row="0" Grid.Column="0" ></StackPanel>
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -25,6 +26,13 @@
                 <StackPanel>
                     <TextBlock HorizontalAlignment="Center" Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" ></TextBlock>
                     <TextBlock>Сохранить</TextBlock>
+                </StackPanel>
+            </Button>
+            
+            <Button CornerRadius="10" Grid.Column="0" x:Name="SaveDoc" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" Click="SaveDoc_Click" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Center" Text="&#xE838;" FontFamily="Segoe MDL2 Assets" ></TextBlock>
+                    <TextBlock>Скачать</TextBlock>
                 </StackPanel>
             </Button>
 

@@ -14,11 +14,9 @@ namespace SchoolDocuments.Models
         public string userId { get; set; }
         public Document document { get; set; }
         public DateTime deadline { get; set; }
-        
         public AgreementStatus status { get; set; }
         public string comment { get; set; }
         public  DateTime created { get; set; } 
-        //public DateTime? statusChanged { get; set; } 
 
         [JsonConstructor]
         public Agreement(string UserId,Document DocumentId,DateTime Deadline,AgreementStatus Status,string Comment,DateTime Created)

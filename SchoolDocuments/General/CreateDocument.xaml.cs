@@ -1,6 +1,10 @@
 ﻿
+using Microsoft.Toolkit.Uwp.Helpers;
 using SchoolDocuments.Models;
 using SchoolDocuments.Moduls;
+
+using Syncfusion.DocIO;
+using Syncfusion.DocIO.DLS;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +14,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Printing;
 using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,6 +26,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Printing;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -39,6 +47,7 @@ namespace SchoolDocuments.General
         public CreateDocument()
         {
             this.InitializeComponent();
+
             Load();
         }
 
@@ -257,9 +266,9 @@ namespace SchoolDocuments.General
 
         private async void add_agreed_Click(object sender, RoutedEventArgs e)
         {
-            if (!signerList.Contains(familiarize.SelectedValue.ToString()))
+            if (!signerList.Contains(Agreement.SelectedValue.ToString()))
             {
-                signerList.Add(Signatory.SelectedValue.ToString());
+                signerList.Add(Agreement.SelectedValue.ToString());
             }
             else
             {
@@ -277,13 +286,24 @@ namespace SchoolDocuments.General
         private static List<Agreement> agreements = new List<Agreement>();
         private static List<Familiarize> familiarizes = new List<Familiarize>();
         private static Document documentForSave;
+
+        public static WordDocument document = new WordDocument();
+        public static WSection section = document.AddSection() as WSection;
+
+        
+
+        private static RichEditBox richEditBox = new RichEditBox();
+
+        private static byte[] testByte;
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            
             if (e.Parameter != null)
             {
                 Models.Document template = e.Parameter as Models.Document;
                 documentForSave = e.Parameter as Models.Document;
                 agreements = template.agreement;
+                testByte = template.file;
                 familiarizes = template.familiarize;
                 document2 = e.Parameter as Document;
                 Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
@@ -293,6 +313,7 @@ namespace SchoolDocuments.General
                 Windows.Storage.Streams.IRandomAccessStream randAccStream =
                 await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
                 DocumentText.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
+                richEditBox.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
                 pageHeader.Text = template.title;
                 saving = true;
 
@@ -307,6 +328,8 @@ namespace SchoolDocuments.General
                 Comment.Visibility = Visibility.Visible;
 
                 Agreement.Items.Clear();
+                fios.Clear();
+                int count = 0;
                 foreach (Agreement agreement in agreements)
                 {
                     Task<User> userTask = ApiWork.GetUserInfo(agreement.userId);
@@ -314,10 +337,23 @@ namespace SchoolDocuments.General
                     {
                         fios.Add(userTask.Result.firstName + " " + userTask.Result.secondName + " " + userTask.Result.middleName);
                     });
+                    if (agreement.status == AgreementStatus.Agreed)
+                    {
+                        count += 1;
+                    }
+                }
+                if (count == agreements.Count)
+                {
+                    Console.WriteLine(count);
                 }
                 foreach (string fio in fios)
                 {
                     Agreement.Items.Add(fio);
+                }
+                List<Agreement> check = agreements.FindAll(p => p.status == AgreementStatus.Agreed);
+                if (check.Count == agreements.Count)
+                {
+                    SaveDoc.Visibility = Visibility.Visible;
                 }
             }
         }
@@ -379,6 +415,79 @@ namespace SchoolDocuments.General
                         Comment.Text = "Комментария не было оставлено";
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Сохранение файла на комп
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void SaveDoc_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+
+            StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+
+            Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+            DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+            await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+
+            document.Open(randAccStream.AsStream(),FormatType.Rtf);
+
+            WParagraphStyle style = document.AddParagraphStyle("Normal") as WParagraphStyle;
+            style.CharacterFormat.FontName = "Times New Roman";
+            style.CharacterFormat.FontSize = 12f;
+            style.ParagraphFormat.BeforeSpacing = 0;
+            style.ParagraphFormat.LineSpacing = 13.8f;
+
+            style.CharacterFormat.TextColor = Syncfusion.DocIO.DLS.Color.Black;
+            style.ParagraphFormat.BeforeSpacing = 12;
+            style.ParagraphFormat.AfterSpacing = 0;
+            style.ParagraphFormat.Keep = true;
+            style.ParagraphFormat.KeepFollow = true;
+            style.ParagraphFormat.OutlineLevel = OutlineLevel.Level1;
+
+            IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
+            paragraph.ApplyStyle("Normal");
+            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+            paragraph = section.AddParagraph();
+
+            MemoryStream memoryStream = new MemoryStream();
+            await document.SaveAsync(memoryStream, FormatType.Rtf);
+            Save(memoryStream,"Document.rtf");
+            randAccStream.Dispose();
+        }
+        async void Save(MemoryStream streams, string filename)
+        {
+            streams.Position = 0;
+            StorageFile stFile;
+            if (!(Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons")))
+            {
+                FileSavePicker savePicker = new FileSavePicker();
+                savePicker.DefaultFileExtension = ".rtf";
+                savePicker.SuggestedFileName = filename;
+                savePicker.FileTypeChoices.Add("Word Documents", new List<string>() { ".rtf" });
+                stFile = await savePicker.PickSaveFileAsync();
+            }
+            else
+            {
+                StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+                stFile = await local.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+            }
+            if (stFile != null)
+            {
+                using (IRandomAccessStream zipStream = await stFile.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    using (Stream outstream = zipStream.AsStreamForWrite())
+                    {
+                        byte[] buffer = streams.ToArray();
+                        outstream.Write(buffer, 0, buffer.Length);
+                        outstream.Flush();
+                    }
+                }
+                //Frame.Navigate(typeof(AdminPage));
             }
         }
     }

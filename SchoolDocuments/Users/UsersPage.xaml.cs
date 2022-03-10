@@ -61,6 +61,10 @@ namespace SchoolDocuments.Users
             {
                 NavigateDoc();
             }
+            else if (task.IsSelected)
+            {
+                NavigateTask();
+            }
         }
 
         public void NavigateDocuments()
@@ -77,6 +81,11 @@ namespace SchoolDocuments.Users
         {
             myFrame.Navigate(typeof(DocumentsPage), Frame);
             pageHeader.Text = "Документы";
+        }
+        public void NavigateTask()
+        {
+            myFrame.Navigate(typeof(Task), Frame);
+            pageHeader.Text = "Задания";
         }
     }
 }
