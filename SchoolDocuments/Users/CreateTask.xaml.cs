@@ -55,25 +55,41 @@ namespace SchoolDocuments.Users
         }
 
         private static List<Performer> performers = new List<Performer>();
-        private void add_agreed_Click(object sender, RoutedEventArgs e)
-        {
+        private async void add_agreed_Click(object sender, RoutedEventArgs e)
+        { 
             User user1 = null;
             foreach(User user in users)
             {
+                if(user.email == UserInfo.Email)
+                {
+                    ContentDialog errorDialog = new ContentDialog()
+                    {
+                        Title = "Ошибка",
+                        Content = "Вы не можете добавить самого себя",
+                        PrimaryButtonText = "Ok"
+                    };
+
+                    await errorDialog.ShowAsync();
+                    break;
+                }
                 if (user.firstName + " " + user.secondName + " " + user.middleName == Agreement.SelectedItem.ToString())
                 {
                     user1 = user;
                 }
             }
-            List<Document> documents = new List<Document>();
-            Performer performer = new Performer(user1,documents);
-            performers.Add(performer);
+            if (user1 != null)
+            {
+                List<Document> documents = new List<Document>();
+                Performer performer = new Performer(user1, documents);
+                performers.Add(performer);
+            }
         }
 
         private void save_Click(object sender, RoutedEventArgs e)
         {
             Models.Task task = new Models.Task(pageHeader.Text,Description.Text,DateTime.Now,TimeOfAgreement.Date.DateTime,UserInfo.user,performers);
             ApiWork.AddTask(task);
+            Frame.Navigate(typeof(UsersPage));
         }
     }
 }

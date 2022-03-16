@@ -36,6 +36,8 @@
                     <TextBlock><Run Text="Создать"/></TextBlock>
                 </StackPanel>
             </Button>
+            <RadioButton x:Name="givenTasks" Grid.Column="0" Content="Выданные задания" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="20" Width="250" Checked="givenTasks_Checked" />
+            <RadioButton x:Name="toDoTasks" Content="Полученные задания" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="20" Width="250" Checked="toDoTasks_Checked"/>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -43,7 +45,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <GridView x:Name="documentsGrid" Margin="100,0,100,100" >
+            <GridView x:Name="documentsGrid" Margin="100,0,100,100" SelectionChanged="documentsGrid_SelectionChanged" >
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" Margin="10" Width="250"  BorderThickness="2" BorderBrush="Gray" CornerRadius="10">
@@ -52,7 +54,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="{Binding title}" Grid.Row="0" FontSize="25" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding created}" Grid.Row="1" FontSize="25" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding deadline}" Grid.Row="1" FontSize="25" HorizontalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>

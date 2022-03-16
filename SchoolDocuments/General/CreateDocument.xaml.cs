@@ -174,12 +174,12 @@ namespace SchoolDocuments.General
                 Document document1 = null;
                 foreach (User user1 in users)
                 {
-                    Familiarize familiarize = new Familiarize(user1.id, document1, false, DateTime.Now);
+                    Familiarize familiarize = new Familiarize(user1, document1, false, DateTime.Now);
                     famList1.Add(familiarize);
                 }
                 foreach (User user2 in usersSig)
                 {
-                    Agreement agreement = new Agreement(user2.id, document1, TimeOfAgreement.Date.DateTime, AgreementStatus.Sent, "", DateTime.Now);
+                    Agreement agreement = new Agreement(user2, document1, TimeOfAgreement.Date.DateTime, AgreementStatus.Sent, "", DateTime.Now);
                     signerList1.Add(agreement);
                 }
                 await userTask.ContinueWith(task =>
@@ -332,7 +332,7 @@ namespace SchoolDocuments.General
                 int count = 0;
                 foreach (Agreement agreement in agreements)
                 {
-                    Task<User> userTask = ApiWork.GetUserInfo(agreement.userId);
+                    Task<User> userTask = ApiWork.GetUserInfo(agreement.user.id);
                     await userTask.ContinueWith(task =>
                     {
                         fios.Add(userTask.Result.firstName + " " + userTask.Result.secondName + " " + userTask.Result.middleName);
@@ -372,7 +372,7 @@ namespace SchoolDocuments.General
                 string sign = Agreement.SelectedValue.ToString();
                 foreach (Agreement agreement in agreements)
                 {
-                    Task<User> userTask = ApiWork.GetUserInfo(agreement.userId);
+                    Task<User> userTask = ApiWork.GetUserInfo(agreement.user.id);
                     await userTask.ContinueWith(task =>
                     {
                         usersSig.Clear();

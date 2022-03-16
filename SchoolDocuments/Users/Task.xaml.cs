@@ -26,15 +26,35 @@ namespace SchoolDocuments.Users
     {
         Frame rootFrame;
         List<Models.Task> tasks = new List<Models.Task>();
+        List<Models.Task> tasksChange = new List<Models.Task>();
         public Task()
         {
             this.InitializeComponent();
         }
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            rootFrame = e.Parameter as Frame;
+        }
+
+        private void add_Click(object sender, RoutedEventArgs e)
+        {
+            rootFrame.Navigate(typeof(CreateTask));
+        }
+
+        private async void change_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void documentsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            rootFrame.Navigate(typeof(TasksDetail), (Models.Task)documentsGrid.SelectedItem);
+        }
+
+        public async void givenTasks_Checked(object sender, RoutedEventArgs e)
+        {
             progress.Visibility = Visibility.Visible;
             tasks.Clear();
-            rootFrame = e.Parameter as Frame;
             Task<List<Models.Task>> getTasks = ApiWork.GetGivenTasks(UserInfo.Id);
             await getTasks.ContinueWith(t =>
             {
@@ -44,14 +64,27 @@ namespace SchoolDocuments.Users
                     tasks.Add(task);
                 }
             });
-            var orderedDocuments = from p in tasks orderby p.created select p;
+            var orderedDocuments = from p in tasks orderby p.deadline select p;
             documentsGrid.ItemsSource = orderedDocuments;
             progress.Visibility = Visibility.Collapsed;
         }
 
-        private void add_Click(object sender, RoutedEventArgs e)
+        private async void toDoTasks_Checked(object sender, RoutedEventArgs e)
         {
-            rootFrame.Navigate(typeof(CreateTask));
+            progress.Visibility = Visibility.Visible;
+            tasks.Clear();
+            Task<List<Models.Task>> getTasks = ApiWork.GetToDoTasks(UserInfo.Id);
+            await getTasks.ContinueWith(t =>
+            {
+                tasks.Clear();
+                foreach (Models.Task task in getTasks.Result)
+                {
+                    tasks.Add(task);
+                }
+            });
+            var orderedDocuments = from p in tasks orderby p.deadline select p;
+            documentsGrid.ItemsSource = orderedDocuments;
+            progress.Visibility = Visibility.Collapsed;
         }
     }
 }

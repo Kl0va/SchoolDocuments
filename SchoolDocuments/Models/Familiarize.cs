@@ -10,15 +10,15 @@ namespace SchoolDocuments.Models
     class Familiarize
     {
         public int id { get; set; }
-        public string userId { get; set; }
+        public User user { get; set; }
         public Document document { get; set; }
         public bool familiarized { get; set; }
         public DateTime created { get; set; }
 
         [JsonConstructor]
-        public Familiarize(string UserId,Document DocumentId,bool Familiarized,DateTime Created)
+        public Familiarize(User UserId,Document DocumentId,bool Familiarized,DateTime Created)
         {
-            userId = UserId;
+            user = UserId;
             document = DocumentId;
             familiarized = Familiarized;
             created = Created;

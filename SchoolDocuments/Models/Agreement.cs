@@ -11,7 +11,7 @@ namespace SchoolDocuments.Models
     class Agreement
     {
         public int id { get; set; }
-        public string userId { get; set; }
+        public User user { get; set; }
         public Document document { get; set; }
         public DateTime deadline { get; set; }
         public AgreementStatus status { get; set; }
@@ -19,9 +19,9 @@ namespace SchoolDocuments.Models
         public  DateTime created { get; set; } 
 
         [JsonConstructor]
-        public Agreement(string UserId,Document DocumentId,DateTime Deadline,AgreementStatus Status,string Comment,DateTime Created)
+        public Agreement(User UserId,Document DocumentId,DateTime Deadline,AgreementStatus Status,string Comment,DateTime Created)
         {
-            userId = UserId;
+            user = UserId;
             document = DocumentId;
             deadline = Deadline;
             status = Status;
