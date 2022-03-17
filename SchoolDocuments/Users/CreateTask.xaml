@@ -48,7 +48,7 @@
                         <ColumnDefinition Width="0.3*"/>
                     </Grid.ColumnDefinitions>
                 </Grid>
-                <TextBox x:Name="Description" Grid.Row="0" Text="asd" TextWrapping="Wrap" FontSize="20"></TextBox>
+                <TextBox x:Name="Description" Grid.Row="0" TextWrapping="Wrap" FontSize="20" PlaceholderText="Описание"></TextBox>
                 <DatePicker x:Name="TimeOfAgreement" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="429"/>
                 <TextBlock x:Name="time" Grid.Row="1" Text="Срок" FontSize="32" VerticalAlignment="Top" HorizontalAlignment="Center"></TextBlock>
                 <ComboBox x:Name="Agreement" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Width="429" Height="42" />

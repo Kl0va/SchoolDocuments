@@ -48,13 +48,13 @@
             <GridView x:Name="documentsGrid" Margin="100,0,100,100" SelectionChanged="documentsGrid_SelectionChanged" >
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <Grid HorizontalAlignment="Stretch" Margin="10" Width="250"  BorderThickness="2" BorderBrush="Gray" CornerRadius="10">
+                        <Grid HorizontalAlignment="Stretch" Margin="10" Width="250"  BorderThickness="2" BorderBrush="Gray" MaxHeight="300" CornerRadius="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding title}" Grid.Row="0" FontSize="25" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding deadline}" Grid.Row="1" FontSize="25" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding title}" Grid.Row="0" FontSize="25" HorizontalAlignment="Center" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="{Binding deadline}" Grid.Row="1" FontSize="25" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                         </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>

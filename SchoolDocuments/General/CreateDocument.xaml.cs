@@ -1,8 +1,5 @@
-﻿
-//using Microsoft.Toolkit.Uwp.Helpers;
-using SchoolDocuments.Models;
+﻿using SchoolDocuments.Models;
 using SchoolDocuments.Moduls;
-
 using Syncfusion.DocIO;
 using Syncfusion.DocIO.DLS;
 using System;
@@ -47,22 +44,19 @@ namespace SchoolDocuments.General
         public CreateDocument()
         {
             this.InitializeComponent();
-
             Load();
         }
 
 
         private static readonly List<User> users = new List<User>();
         private static readonly List<User> usersSig = new List<User>();
-        private static readonly List<User> usersFam = new List<User>();
         private static readonly List<Models.Template> templates = new List<Models.Template>();
-        private static readonly List<Models.Document> documents1 = new List<Models.Document>();
         public async void Load()
         {
             Agreement.Items.Clear();
             Task<List<User>> userTask = ApiWork.GetAllUsers();
             await userTask.ContinueWith(task =>
-            {
+            { 
                 users.Clear();
                 foreach (User user in userTask.Result)
                 {

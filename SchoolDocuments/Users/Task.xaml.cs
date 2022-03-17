@@ -31,7 +31,7 @@ namespace SchoolDocuments.Users
         {
             this.InitializeComponent();
         }
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             rootFrame = e.Parameter as Frame;
         }
@@ -41,7 +41,7 @@ namespace SchoolDocuments.Users
             rootFrame.Navigate(typeof(CreateTask));
         }
 
-        private async void change_Click(object sender, RoutedEventArgs e)
+        private void change_Click(object sender, RoutedEventArgs e)
         {
 
         }
