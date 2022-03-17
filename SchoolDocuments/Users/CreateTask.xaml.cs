@@ -43,6 +43,8 @@ namespace SchoolDocuments.Users
                     users.Add(user);
                 }
             });
+            var itemToDelete = users.Where(x => x.email == UserInfo.Email);
+            users.Remove(itemToDelete.First());
             List<string> FIO = new List<string>();
             foreach (User user1 in users)
             {
@@ -55,23 +57,11 @@ namespace SchoolDocuments.Users
         }
 
         private static List<Performer> performers = new List<Performer>();
-        private async void add_agreed_Click(object sender, RoutedEventArgs e)
+        private void add_agreed_Click(object sender, RoutedEventArgs e)
         { 
             User user1 = null;
             foreach(User user in users)
             {
-                if(user.email == UserInfo.Email)
-                {
-                    ContentDialog errorDialog = new ContentDialog()
-                    {
-                        Title = "Ошибка",
-                        Content = "Вы не можете добавить самого себя",
-                        PrimaryButtonText = "Ok"
-                    };
-
-                    await errorDialog.ShowAsync();
-                    break;
-                }
                 if (user.firstName + " " + user.secondName + " " + user.middleName == Agreement.SelectedItem.ToString())
                 {
                     user1 = user;
