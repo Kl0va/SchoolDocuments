@@ -50,6 +50,8 @@
                 </Grid>
                 <TextBox x:Name="Description" Grid.Row="0" Text="asd" TextWrapping="Wrap" FontSize="20" IsReadOnly="True"></TextBox>
                 <ComboBox x:Name="Agreement" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="429" Height="42" Margin="20" SelectionChanged="Agreement_SelectionChanged"/>
+                <Button x:Name="InProgress" Grid.Row="1" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" Click="InProgress_Click">В прогрессе</Button>
+                <Button x:Name="Finished" Grid.Row="1" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Finished_Click" >Выполнено</Button>
                 <TextBlock x:Name="perfComment" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="25" Width="1300" Height="100" TextWrapping="Wrap"></TextBlock>
                 <TextBlock x:Name="perfStatus" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="25" Width="1300" Height="100" TextWrapping="Wrap" TextAlignment="Center"></TextBlock>
             </Grid>

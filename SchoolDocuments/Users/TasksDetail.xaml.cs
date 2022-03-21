@@ -32,7 +32,32 @@ namespace SchoolDocuments.Users
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             task = e.Parameter as Models.Task;
+            if(!(task.author.email == UserInfo.Email))
+            {
+                Agreement.Visibility = Visibility.Collapsed;
+                save.Visibility = Visibility.Collapsed;
+                perfComment.Visibility = Visibility.Collapsed;
 
+                if (task.performs.Where(x => x.user.email == UserInfo.Email).All(y => y.status == Models.PerformerStatus.InProgress))
+                {
+                    InProgress.Visibility = Visibility.Collapsed;
+                }
+                else if (task.performs.Where(x => x.user.email == UserInfo.Email).All(y => y.status == Models.PerformerStatus.Completed))
+                {
+                    InProgress.Visibility = Visibility.Collapsed;
+                    Finished.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    InProgress.Visibility = Visibility.Collapsed;
+                    Finished.Visibility = Visibility.Collapsed;
+                }
+            }
+            else
+            {
+                InProgress.Visibility = Visibility.Collapsed;
+                Finished.Visibility = Visibility.Collapsed;
+            }
             pageHeader.Text = task.title;
             Description.Text = task.desc;
 
@@ -88,6 +113,20 @@ namespace SchoolDocuments.Users
                 ApiWork.DeleteTask(task);
                 Frame.GoBack();
             }
+        }
+
+        private void InProgress_Click(object sender, RoutedEventArgs e)
+        {
+            Models.Performer idPerf = task.performs.Where(x=>x.user.email == UserInfo.Email).Single();
+            ApiWork.PutTaskStatus(idPerf.id,Models.PerformerStatus.InProgress);
+            Frame.Navigate(typeof(UsersPage));
+        }
+
+        private void Finished_Click(object sender, RoutedEventArgs e)
+        {
+            Models.Performer idPerf = task.performs.Where(x => x.user.email == UserInfo.Email).Single();
+            ApiWork.PutTaskStatus(idPerf.id, Models.PerformerStatus.Completed);
+            Frame.Navigate(typeof(UsersPage));
         }
     }
 }

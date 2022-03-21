@@ -30,6 +30,7 @@ namespace SchoolDocuments.Users
         public Task()
         {
             this.InitializeComponent();
+            givenTasks.IsChecked = true;
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -67,6 +68,7 @@ namespace SchoolDocuments.Users
             var orderedDocuments = from p in tasks orderby p.deadline select p;
             documentsGrid.ItemsSource = orderedDocuments;
             progress.Visibility = Visibility.Collapsed;
+            var sort = tasks.All(x => x.performs.All(p => p.status == Models.PerformerStatus.Completed));
         }
 
         private async void toDoTasks_Checked(object sender, RoutedEventArgs e)
@@ -83,6 +85,26 @@ namespace SchoolDocuments.Users
                 }
             });
             var orderedDocuments = from p in tasks orderby p.deadline select p;
+            documentsGrid.ItemsSource = orderedDocuments;
+            progress.Visibility = Visibility.Collapsed;
+        }
+
+        private async void completedTasks_Checked(object sender, RoutedEventArgs e)
+        {
+            progress.Visibility = Visibility.Visible;
+            tasks.Clear();
+            Task<List<Models.Task>> getTasks = ApiWork.GetGivenTasks(UserInfo.Id);
+            await getTasks.ContinueWith(t =>
+            {
+                tasks.Clear();
+                foreach (Models.Task task in getTasks.Result)
+                {
+                    tasks.Add(task);
+                }
+            });
+            List<Models.Task> sort = new List<Models.Task>();
+            sort = tasks.Where(x=> x.performs.All(y=>y.status == Models.PerformerStatus.Completed)).ToList();
+            var orderedDocuments = from p in sort orderby p.deadline select p;
             documentsGrid.ItemsSource = orderedDocuments;
             progress.Visibility = Visibility.Collapsed;
         }

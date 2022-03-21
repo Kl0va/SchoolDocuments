@@ -83,6 +83,7 @@ namespace SchoolDocuments.Moduls
 
         public static async void AddTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PostJsonAsync(template).ReceiveString();
         public static async void AddTask(Models.Task task) => await $"{baseUrl}".AppendPathSegment("/task").PostJsonAsync(task).ReceiveString();
+        public static async void PutTaskStatus(int id,PerformerStatus status) => await $"{baseUrl}".AppendPathSegment("/task").AppendPathSegment($"{id}").AppendPathSegment("/status").PutJsonAsync(status).ReceiveString();
         public static async void DeleteTask(Models.Task task) => await $"{baseUrl}".AppendPathSegment("/task").AppendPathSegment($"{task.id}").DeleteAsync().ReceiveString();
         public static async void SaveRole(User user,Role role) => await $"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"{user.id}").PutJsonAsync(role).ReceiveString();
         public static async void SaveTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PutJsonAsync(template).ReceiveString();
