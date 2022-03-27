@@ -143,6 +143,7 @@ namespace SchoolDocuments.General
                 randAccStream.Dispose();
                 documentForSave.file = File.ReadAllBytes(file.Path);
                 ApiWork.SaveDocument(documentForSave);
+                Frame.GoBack();
             }
             else if (Template.SelectedValue.ToString() != "")
             {
@@ -201,6 +202,7 @@ namespace SchoolDocuments.General
 
                 Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text, File.ReadAllBytes(file.Path), "", famList1, signerList1);
                 ApiWork.AddDocument(document);
+                Frame.GoBack();
             }
             else
             {

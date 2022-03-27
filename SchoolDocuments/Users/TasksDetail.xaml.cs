@@ -47,9 +47,8 @@ namespace SchoolDocuments.Users
                     InProgress.Visibility = Visibility.Collapsed;
                     Finished.Visibility = Visibility.Collapsed;
                 }
-                else
+                else if(task.performs.Where(x => x.user.email == UserInfo.Email).All(y => y.status == Models.PerformerStatus.Waiting))
                 {
-                    InProgress.Visibility = Visibility.Collapsed;
                     Finished.Visibility = Visibility.Collapsed;
                 }
             }

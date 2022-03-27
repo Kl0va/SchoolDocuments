@@ -114,7 +114,7 @@ namespace SchoolDocuments.Admin
                             PrimaryButtonText = "Ок"
                         };
                         ContentDialogResult result = await errorDialog.ShowAsync();
-                        Frame.Navigate(typeof(TemplatesPage));
+                        Frame.Navigate(typeof(AdminPage));
 
                     }
                     else
@@ -187,7 +187,7 @@ namespace SchoolDocuments.Admin
 
                             Models.Template template = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
                             ApiWork.AddTemplate(template);
-                            Save(stream, "Sample.docx");
+                            //Save(stream, "Sample.docx");
                             Frame.Navigate(typeof(AdminPage));
                         }
                     }

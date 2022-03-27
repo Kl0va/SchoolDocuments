@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -68,7 +69,7 @@ namespace SchoolDocuments.Admin
         private async void TemplatesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             User user = (User)TemplatesGrid.SelectedItem;
-            Role role = new Role("");           
+            Role role = new Role("");
             if (user.email != "pr.pr.gr-1@ok654.ru")
             {
                 ContentDialog errorDialog = new ContentDialog()
@@ -76,7 +77,8 @@ namespace SchoolDocuments.Admin
                     Title = "Выбор",
                     Content = "Выберите роль для пользователя",
                     PrimaryButtonText = "Администратор",
-                    SecondaryButtonText = "Сотрудник"
+                    SecondaryButtonText = "Сотрудник",
+                    CloseButtonText = "Отмена"
                 };
                 ContentDialogResult result = await errorDialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
@@ -91,6 +93,7 @@ namespace SchoolDocuments.Admin
                     role.name = "Employee";
                     ApiWork.SaveRole(user,role);
                 }
+                Thread.Sleep(500);
                 Frame.Navigate(this.GetType());
             }
             else
