@@ -51,6 +51,11 @@
                 <TextBox x:Name="Description" Grid.Row="0" TextWrapping="Wrap" FontSize="20" PlaceholderText="Описание"></TextBox>
                 <DatePicker x:Name="TimeOfAgreement" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="429"/>
                 <TextBlock x:Name="time" Grid.Row="1" Text="Срок" FontSize="32" VerticalAlignment="Top" HorizontalAlignment="Center"></TextBlock>
+                <ScrollViewer Grid.Row="3">
+                    <StackPanel>
+                        <TextBlock x:Name="addedPerf" Grid.Row="3" Text="" FontSize="32" VerticalAlignment="Top" HorizontalAlignment="Center"></TextBlock>
+                    </StackPanel>
+                </ScrollViewer>
                 <ComboBox x:Name="Agreement" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Width="429" Height="42" />
                 <Button x:Name="add_agreed" Grid.Row="2" Height="50" CornerRadius="10" Width="230" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Добавить исполнителя" Click="add_agreed_Click"/>
             </Grid>

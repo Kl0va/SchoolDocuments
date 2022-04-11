@@ -84,10 +84,12 @@ namespace SchoolDocuments.Moduls
         public static async void AddTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PostJsonAsync(template).ReceiveString();
         public static async void AddTask(Models.Task task) => await $"{baseUrl}".AppendPathSegment("/task").PostJsonAsync(task).ReceiveString();
         public static async void PutTaskStatus(int id,PerformerStatus status) => await $"{baseUrl}".AppendPathSegment("/task").AppendPathSegment($"{id}").AppendPathSegment("/status").PutJsonAsync(status).ReceiveString();
+        public static async void PutTaskComment(int id,string comment) => await $"{baseUrl}".AppendPathSegment("/task").AppendPathSegment($"{id}").AppendPathSegment("/comment").PutJsonAsync(comment).ReceiveString();
         public static async void DeleteTask(Models.Task task) => await $"{baseUrl}".AppendPathSegment("/task").AppendPathSegment($"{task.id}").DeleteAsync().ReceiveString();
         public static async void SaveRole(User user,Role role) => await $"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"{user.id}").PutJsonAsync(role).ReceiveString();
         public static async void SaveTemplate(Template template) => await $"{baseUrl}".AppendPathSegment("/template").PutJsonAsync(template).ReceiveString();
         public static async void AddDocument(Document document) => await $"{baseUrl}".AppendPathSegment("/document").PostJsonAsync(document).ReceiveString();
+        public static async void AddDocumentToPerformer(Document document,Performer performer) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/perform").AppendPathSegment($"{performer.id}").PostJsonAsync(document).ReceiveString();
         public static async void SaveDocument(Document document) => await $"{baseUrl}".AppendPathSegment("/document").PutJsonAsync(document).ReceiveString();
         public static async void SaveFam(Familiarize familiarize) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/familiarize").AppendPathSegment($"{familiarize.id}").PutJsonAsync(familiarize).ReceiveString();
         public static async void SaveFamList(List<int> familiarize) => await $"{baseUrl}".AppendPathSegment("/document").AppendPathSegment("/familiarize").PutJsonAsync(familiarize).ReceiveString();

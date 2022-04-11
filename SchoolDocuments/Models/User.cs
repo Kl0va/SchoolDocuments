@@ -21,7 +21,7 @@ namespace SchoolDocuments.Models
         {
             get
             {
-                return firstName + secondName + middleName;
+                return firstName + " " + secondName + " " + middleName;
             } 
         }
 

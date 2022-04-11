@@ -200,7 +200,7 @@ namespace SchoolDocuments.General
                 await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                 randAccStream.Dispose();
 
-                Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text, File.ReadAllBytes(file.Path), "", famList1, signerList1);
+                Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text.Trim(), File.ReadAllBytes(file.Path), null, famList1, signerList1);
                 ApiWork.AddDocument(document);
                 Frame.GoBack();
             }
@@ -366,18 +366,18 @@ namespace SchoolDocuments.General
                 agreedStatus.Visibility = Visibility.Visible;
                 Comment.Visibility = Visibility.Visible;
                 string sign = Agreement.SelectedValue.ToString();
+                usersSig.Clear();
                 foreach (Agreement agreement in agreements)
                 {
                     Task<User> userTask = ApiWork.GetUserInfo(agreement.user.id);
                     await userTask.ContinueWith(task =>
                     {
-                        usersSig.Clear();
                         if (sign.Contains(userTask.Result.firstName + " " + userTask.Result.secondName + " " + userTask.Result.middleName))
                         {
                             usersSig.Add(userTask.Result);
                         }
                     });
-                    if (usersSig.Count >= 1)
+                    if (usersSig.Count > 0)
                     {
                         foreach (User user1 in usersSig)
                         {

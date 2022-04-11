@@ -43,16 +43,18 @@ namespace SchoolDocuments.Admin
             if (e.Parameter != null)
             {
                 Models.Template template = e.Parameter as Models.Template;
-                Windows.Storage.StorageFolder storageFolder =
-    Windows.Storage.ApplicationData.Current.LocalFolder;
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
                 File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", template.file.ToArray());
                 StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
-                Windows.Storage.Streams.IRandomAccessStream randAccStream =
-                await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
                 TemplateText.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
                 pageHeader.Text = template.name;
                 saving = true;
+            }
+            else
+            {
+                saving = false;
             }
         }
 
@@ -62,7 +64,7 @@ namespace SchoolDocuments.Admin
         private async void save_Click(object sender, RoutedEventArgs e)
         {
             string checkText = "";
-            TemplateText.Document.GetText(TextGetOptions.FormatRtf,out checkText);
+            TemplateText.Document.GetText(TextGetOptions.FormatRtf, out checkText);
             if (pageHeader.Text.Length >= 3 && checkText != "")
             {
                 Task<List<Models.Template>> getTemplates = ApiWork.GetAllTemplates();
@@ -129,6 +131,7 @@ namespace SchoolDocuments.Admin
                             //Создание стиля
                             WParagraphStyle style = document.AddParagraphStyle("Normal") as WParagraphStyle;
                             style.CharacterFormat.FontName = "Times New Roman";
+                            style.CharacterFormat.TextColor = Syncfusion.DocIO.DLS.Color.Black;
                             style.CharacterFormat.FontSize = 12f;
                             style.ParagraphFormat.BeforeSpacing = 0;
                             style.ParagraphFormat.LineSpacing = 13.8f;
@@ -169,8 +172,8 @@ namespace SchoolDocuments.Admin
                             //textRange.CharacterFormat.FontSize = 12f;
 
                             MemoryStream stream = new MemoryStream();
-                            await document.SaveAsync(stream, FormatType.Docx);
-                            
+                            await document.SaveAsync(stream, FormatType.Rtf);
+
 
                             Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
@@ -185,13 +188,34 @@ namespace SchoolDocuments.Admin
                             await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                             randAccStream.Dispose();
 
-                            Models.Template template = new Models.Template(pageHeader.Text, File.ReadAllBytes(file.Path));
+                            Models.Template template = new Models.Template(pageHeader.Text.Trim(), File.ReadAllBytes(file.Path));
                             ApiWork.AddTemplate(template);
-                            //Save(stream, "Sample.docx");
+
+
+
+                            //"App" is the class of Portable project.
+
+                            //Opens an existing document from file system through constructor of WordDocument class
+                            MemoryStream stream1 = new MemoryStream();
+                            await document.SaveAsync(stream1, FormatType.Docx);
+                            //Saves the stream as Word file in local machine
+                            Save(stream1, "RtfToWord.docx");
+                            //Closes the Word document
+                            document.Close();
                             Frame.Navigate(typeof(AdminPage));
                         }
                     }
                 }
+            }
+            else
+            {
+                ContentDialog errorDialog = new ContentDialog()
+                {
+                    Title = "Ошибка",
+                    Content = "Заполните все поля",
+                    PrimaryButtonText = "Ок"
+                };
+                ContentDialogResult result = await errorDialog.ShowAsync();
             }
         }
 
@@ -238,7 +262,7 @@ namespace SchoolDocuments.Admin
             {
                 try
                 {
-                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);          
+                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
                     // Load the file into the Document property of the RichEditBox.
                     TemplateText.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
                 }

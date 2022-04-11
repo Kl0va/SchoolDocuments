@@ -14,7 +14,10 @@ namespace SchoolDocuments.Converters
             writer.WriteStartArray();
             foreach (byte valueByte in value)
             {
-                writer.WriteValue(valueByte);
+                if (valueByte > 127)
+                    writer.WriteValue(valueByte - 256);
+                else
+                    writer.WriteValue(valueByte);
             }
             writer.WriteEndArray();
         }

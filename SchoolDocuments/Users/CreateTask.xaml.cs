@@ -57,18 +57,32 @@ namespace SchoolDocuments.Users
         }
 
         private static List<Performer> performers = new List<Performer>();
-        private void add_agreed_Click(object sender, RoutedEventArgs e)
-        { 
+        private async void add_agreed_Click(object sender, RoutedEventArgs e)
+        {
             User user1 = null;
-            foreach(User user in users)
+            foreach (User user in users)
             {
                 if (user.firstName + " " + user.secondName + " " + user.middleName == Agreement.SelectedItem.ToString())
                 {
-                    user1 = user;
+                    if (performers.Where(x => x.user.fullName.Contains(Agreement.SelectedItem.ToString())).Any())
+                    {
+                        ContentDialog errorDialog = new ContentDialog()
+                        {
+                            Title = "Ошибка",
+                            Content = "Человек уже был добавлен",
+                            PrimaryButtonText = "Ок"
+                        };
+                        ContentDialogResult result = await errorDialog.ShowAsync();
+                    }
+                    else
+                    {
+                        user1 = user;
+                    }
                 }
             }
             if (user1 != null)
             {
+                addedPerf.Text += $"\n {user1.firstName + " " + user1.secondName}";
                 List<Document> documents = new List<Document>();
                 Performer performer = new Performer(user1, documents);
                 performers.Add(performer);
@@ -77,7 +91,7 @@ namespace SchoolDocuments.Users
 
         private void save_Click(object sender, RoutedEventArgs e)
         {
-            Models.Task task = new Models.Task(pageHeader.Text,Description.Text,DateTime.Now,TimeOfAgreement.Date.DateTime,UserInfo.user,performers);
+            Models.Task task = new Models.Task(pageHeader.Text.Trim(), Description.Text, DateTime.Now, TimeOfAgreement.Date.DateTime, UserInfo.user, performers);
             ApiWork.AddTask(task);
             Frame.Navigate(typeof(UsersPage));
         }

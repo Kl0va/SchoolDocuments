@@ -304,6 +304,9 @@
     <PackageReference Include="PSPDFKitUWP">
       <Version>2.11.2</Version>
     </PackageReference>
+    <PackageReference Include="sautinsoft.document">
+      <Version>5.5.3.23</Version>
+    </PackageReference>
     <PackageReference Include="Syncfusion.DocIO.UWP">
       <Version>19.4.0.48</Version>
     </PackageReference>
