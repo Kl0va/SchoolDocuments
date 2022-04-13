@@ -51,8 +51,7 @@ namespace SchoolDocuments
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            UserInfo.Id = "123";
-            Frame.Navigate(typeof(AdminPage));
+            
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

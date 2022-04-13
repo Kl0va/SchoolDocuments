@@ -56,7 +56,7 @@ namespace SchoolDocuments.General
             Agreement.Items.Clear();
             Task<List<User>> userTask = ApiWork.GetAllUsers();
             await userTask.ContinueWith(task =>
-            { 
+            {
                 users.Clear();
                 foreach (User user in userTask.Result)
                 {
