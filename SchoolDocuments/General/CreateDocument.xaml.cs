@@ -483,7 +483,6 @@ namespace SchoolDocuments.General
                         outstream.Flush();
                     }
                 }
-                //Frame.Navigate(typeof(AdminPage));
             }
         }
     }

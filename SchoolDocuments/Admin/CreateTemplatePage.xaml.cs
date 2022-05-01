@@ -166,10 +166,8 @@ namespace SchoolDocuments.Admin
                             string inputText = "";
                             TemplateText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out inputText);
                             string typeName = pageHeader.Text;
-                            //TemplateText.Document.SetText(TextSetOptions.FormatRtf, inputText);
                             WTextRange textRange = new WTextRange(document);
                             textRange = paragraph.AppendText(inputText) as WTextRange;
-                            //textRange.CharacterFormat.FontSize = 12f;
 
                             MemoryStream stream = new MemoryStream();
                             await document.SaveAsync(stream, FormatType.Rtf);
