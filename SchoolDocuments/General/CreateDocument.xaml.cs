@@ -352,6 +352,10 @@ namespace SchoolDocuments.General
                     SaveDoc.Visibility = Visibility.Visible;
                 }
             }
+            else
+            {
+                saving = false;
+            }
         }
 
         private void Signatory_SelectionChanged(object sender, SelectionChangedEventArgs e)
