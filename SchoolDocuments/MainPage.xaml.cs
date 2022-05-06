@@ -207,7 +207,7 @@ namespace SchoolDocuments
                 UserInfo.user = getDocuments.Result;
             });
             UserInfo.Email = UserInfo.user.email;
-            if (UserInfo.user.role == null)
+            if (UserInfo.user.role == "Admin")
             {
                 ContentDialog errorDialog = new ContentDialog()
                 {
@@ -217,7 +217,7 @@ namespace SchoolDocuments
                     SecondaryButtonText = "Сотрудник"
                 };
                 ContentDialogResult result = await errorDialog.ShowAsync();
-                if(result == ContentDialogResult.Primary)
+                if (result == ContentDialogResult.Primary)
                 {
                     Frame.Navigate(typeof(AdminPage));
                 }
@@ -226,7 +226,7 @@ namespace SchoolDocuments
                     Frame.Navigate(typeof(Users.UsersPage));
                 }
             }
-            else if (UserInfo.user.role == "Employee")
+            else if (UserInfo.user.role == "Employee" || UserInfo.user.role == null)
             {
                 Frame.Navigate(typeof(Users.UsersPage));
             }
