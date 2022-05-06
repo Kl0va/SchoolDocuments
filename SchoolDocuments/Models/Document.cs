@@ -17,6 +17,7 @@ namespace SchoolDocuments.Models
         [JsonConverter(typeof(BytesConverter))]
         public byte[] file { get; set; }
         public string desc { get; set; }
+        public string extension { get; set; }
         public List<Familiarize> familiarize { get; set; }
         public List<Agreement> agreement { get; set; }
 
@@ -30,6 +31,7 @@ namespace SchoolDocuments.Models
             desc = Desc;
             familiarize = Familiarize;
             agreement = Agreement;
+            extension = "rtf";
         }
     }
 }

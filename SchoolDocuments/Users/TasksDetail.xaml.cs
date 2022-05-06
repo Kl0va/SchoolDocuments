@@ -98,7 +98,7 @@ namespace SchoolDocuments.Users
             {
                 if (Agreement.SelectedItem.ToString() == performer.user.firstName + " " + performer.user.secondName + " " + performer.user.middleName)
                 {
-                    if(performer.documents != null)
+                    if (performer.documents.Count > 0)
                     {
                         Attach.Visibility = Visibility.Visible;
                         Attach.Content = "Открыть файл";
@@ -108,6 +108,7 @@ namespace SchoolDocuments.Users
                     else
                     {
                         AttachStatus.Visibility = Visibility.Visible;
+                        AttachStatus.Foreground = new SolidColorBrush(Windows.UI.Colors.Red);
                         AttachStatus.Text = "Документ не был прикреплен";
                     }
                     if (performer.status == Models.PerformerStatus.InProgress)
@@ -217,13 +218,14 @@ namespace SchoolDocuments.Users
                 {
                     if (Agreement.SelectedItem.ToString() == performer.user.firstName + " " + performer.user.secondName + " " + performer.user.middleName)
                     {
+
                         Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
                         File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", performer.documents[0].file.ToArray());
                         StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
                         Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
                         Inp.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
                         randAccStream.Dispose();
-                        
+
 
                         Windows.Storage.Streams.IRandomAccessStream randAccStream1 = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
                         Inp.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream1);

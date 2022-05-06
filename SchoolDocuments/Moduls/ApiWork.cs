@@ -12,7 +12,7 @@ namespace SchoolDocuments.Moduls
 {
     class ApiWork
     {
-        private static string baseUrl = "https://documents-tasks-api.herokuapp.com/";
+        private static string baseUrl = "https://api.ok654.org";
         public static async Task<List<Models.Document>> GetAllDocuments()
         {
             var response = await $@"{baseUrl}".AppendPathSegment("/documents").GetStringAsync();

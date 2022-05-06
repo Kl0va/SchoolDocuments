@@ -207,7 +207,7 @@ namespace SchoolDocuments
                 UserInfo.user = getDocuments.Result;
             });
             UserInfo.Email = UserInfo.user.email;
-            if (UserInfo.user.role == "Admin")
+            if (UserInfo.user.role == null)
             {
                 ContentDialog errorDialog = new ContentDialog()
                 {
