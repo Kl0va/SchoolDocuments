@@ -9,7 +9,7 @@
   <Identity
     Name="c2ad82e5-1fbe-4b82-955e-0e05b5c04fab"
     Publisher="CN=Klova"
-    Version="1.0.19.0" />
+    Version="1.0.21.0" />
 
   <mp:PhoneIdentity PhoneProductId="c2ad82e5-1fbe-4b82-955e-0e05b5c04fab" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

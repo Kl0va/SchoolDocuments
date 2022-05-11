@@ -17,7 +17,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
-    <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
@@ -26,7 +26,7 @@
     <AppInstallerUri>https://apps.contoso.com/SchoolDocuments</AppInstallerUri>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageDir>C:\Users\Klova\source\repos\SchoolDocuments\SchoolDocuments\Test\</AppxPackageDir>
-    <PackageCertificateThumbprint>30A69B2740019DDDF0ABB560062BC1401A2F4F6F</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>C7AA1F70814CB07AB51A7D36B83E2F71A58D9260</PackageCertificateThumbprint>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -186,9 +186,6 @@
     <Compile Include="Users\FamiliarizeDocuments.xaml.cs">
       <DependentUpon>FamiliarizeDocuments.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Users\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Users\Task.xaml.cs">
       <DependentUpon>Task.xaml</DependentUpon>
     </Compile>
@@ -268,10 +265,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Users\FamiliarizeDocuments.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Users\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

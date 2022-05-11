@@ -25,6 +25,7 @@ using Newtonsoft.Json.Linq;
 using Windows.UI.Xaml.Media.Imaging;
 using SchoolDocuments.Moduls;
 using System.Threading.Tasks;
+using Windows.UI.ViewManagement;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -47,6 +48,7 @@ namespace SchoolDocuments
         public MainPage()
         {
             this.InitializeComponent();
+            ApplicationView.GetForCurrentView().TryResizeView(new Size(1920,1080));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -90,7 +92,7 @@ namespace SchoolDocuments
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             var isDark = Application.Current.RequestedTheme == ApplicationTheme.Dark;
-            if (isDark == true)
+            if (isDark)
             {
                 logo.Source = new BitmapImage(new Uri("ms-appx:///Assets/white.png"));
             }

@@ -26,6 +26,7 @@ namespace SchoolDocuments.Users
     {
         Frame rootFrame;
         List<Models.Task> tasks = new List<Models.Task>();
+        List<Models.Task> tasksSearch = new List<Models.Task>();
         List<Models.Task> tasksChange = new List<Models.Task>();
         public Task()
         {
@@ -103,10 +104,24 @@ namespace SchoolDocuments.Users
                 }
             });
             List<Models.Task> sort = new List<Models.Task>();
-            sort = tasks.Where(x=> x.performs.All(y=>y.status == Models.PerformerStatus.Completed)).ToList();
+            sort = tasks.Where(x => x.performs.All(y => y.status == Models.PerformerStatus.Completed)).ToList();
             var orderedDocuments = from p in sort orderby p.deadline select p;
             documentsGrid.ItemsSource = orderedDocuments;
             progress.Visibility = Visibility.Collapsed;
+        }
+
+        private void search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            tasksSearch.Clear();
+            foreach (Models.Task template in tasks)
+            {
+                if (template.title.ToLower().Contains(search.Text.ToLower()))
+                {
+                    tasksSearch.Add(template);
+                }
+            }
+            documentsGrid.ItemsSource = null;
+            documentsGrid.ItemsSource = tasksSearch;
         }
     }
 }

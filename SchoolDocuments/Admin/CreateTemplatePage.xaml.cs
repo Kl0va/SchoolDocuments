@@ -197,7 +197,7 @@ namespace SchoolDocuments.Admin
                             MemoryStream stream1 = new MemoryStream();
                             await document.SaveAsync(stream1, FormatType.Docx);
                             //Saves the stream as Word file in local machine
-                            Save(stream1, "RtfToWord.docx");
+                            //  Save(stream1, "RtfToWord.docx");
                             //Closes the Word document
                             document.Close();
                             Frame.Navigate(typeof(AdminPage));

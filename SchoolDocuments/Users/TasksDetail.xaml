@@ -28,6 +28,9 @@
                     <TextBlock>Удалить</TextBlock>
                 </StackPanel>
             </Button>
+            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"  Text="Название:" TextWrapping="Wrap" Height="29" FontSize="20" Width="99"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Text="Описание:" TextWrapping="Wrap" Height="29" FontSize="20" Width="99"/>
+            
 
         </Grid>
         <Grid Grid.Row="1">
@@ -58,6 +61,8 @@
                 <Button x:Name="Finished" Grid.Row="1" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Finished_Click" >Выполнено</Button>
                 <TextBlock x:Name="perfComment" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="25" Width="1300" Height="100" TextWrapping="Wrap"></TextBlock>
                 <TextBlock x:Name="perfStatus" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="25" Width="1300" Height="100" TextWrapping="Wrap" TextAlignment="Center"></TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Text="Комментарий:" TextWrapping="Wrap" Height="29" FontSize="15" Width="99"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top"  Text="Исполнители:" TextWrapping="Wrap" Height="29" FontSize="15" Width="99"/>
             </Grid>
         </Grid>
     </Grid>

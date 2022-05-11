@@ -39,7 +39,7 @@ namespace SchoolDocuments.Users
         }
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(SettingsPage),email);
+            
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)

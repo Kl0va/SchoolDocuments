@@ -14,8 +14,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock HorizontalAlignment="Center" Name="pageHeader" Text="На ознакомление" VerticalAlignment="Center" FontSize="34" />
-        <Button x:Name="Settings" FontFamily="Segoe MDL2 Assets" FontSize="28"
-                    Content="&#xE713;" Width="47" Margin="0,0,0,2" VerticalAlignment="Center" HorizontalAlignment="Right" Click="Settings_Click"/>
 
         <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" FontSize="28"
                     Content="&#xE700;" Click="HamburgerButton_Click" Width="47" Margin="0,0,0,2" VerticalAlignment="Bottom"/>

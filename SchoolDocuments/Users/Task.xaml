@@ -28,7 +28,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="0.1*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox CornerRadius="10" Grid.Column="0" PlaceholderText="Поиск" x:Name="search" VerticalAlignment="Center" />
+                <TextBox CornerRadius="10" Grid.Column="0" PlaceholderText="Поиск" x:Name="search" VerticalAlignment="Center" TextChanged="search_TextChanged" />
             </Grid>
             <Button CornerRadius="10" Grid.Column="2" x:Name="add" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" Margin="0,0,0,0" Click="add_Click">
                 <StackPanel>

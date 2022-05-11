@@ -145,7 +145,7 @@ namespace SchoolDocuments.General
                 ApiWork.SaveDocument(documentForSave);
                 Frame.GoBack();
             }
-            else if (Template.SelectedValue.ToString() != "")
+            else if (!string.IsNullOrEmpty(Template.Text))
             {
                 Task<List<User>> userTask = ApiWork.GetAllUsers();
                 await userTask.ContinueWith(task =>
@@ -342,9 +342,17 @@ namespace SchoolDocuments.General
                 {
                     Console.WriteLine(count);
                 }
-                foreach (string fio in fios)
+                if (fios.Count < 1)
                 {
-                    Agreement.Items.Add(fio);
+                    Agreement.Visibility = Visibility.Collapsed;
+                    Comment.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    foreach (string fio in fios)
+                    {
+                        Agreement.Items.Add(fio);
+                    }
                 }
                 List<Agreement> check = agreements.FindAll(p => p.status == AgreementStatus.Agreed);
                 if (check.Count == agreements.Count)

@@ -159,7 +159,7 @@ namespace SchoolDocuments.Users
             ApiWork.PutTaskStatus(idPerf.id, Models.PerformerStatus.InProgress);
             Frame.Navigate(typeof(UsersPage));
         }
-
+        private static List<Document> document = new List<Document>();
         private void Finished_Click(object sender, RoutedEventArgs e)
         {
             Models.Performer idPerf = task.performs.Where(x => x.user.email == UserInfo.Email).Single();
@@ -168,14 +168,14 @@ namespace SchoolDocuments.Users
             {
                 ApiWork.PutTaskComment(idPerf.id, Comment.Text);
             }
-            if (document != null)
+            if (document.Count > 0)
             {
                 performer.id = idPerf.id;
                 ApiWork.AddDocumentToPerformer(document[0], performer);
             }
             Frame.Navigate(typeof(UsersPage));
         }
-        private static List<Document> document = new List<Document>();
+        
         private static Performer performer;
 
         public static WordDocument document1 = new WordDocument();

@@ -34,6 +34,7 @@ namespace SchoolDocuments
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            
             ApplicationView.PreferredLaunchViewSize = new Size(1920, 1080);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
         }

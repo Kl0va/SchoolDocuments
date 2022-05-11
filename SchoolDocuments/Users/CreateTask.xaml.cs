@@ -89,11 +89,52 @@ namespace SchoolDocuments.Users
             }
         }
 
-        private void save_Click(object sender, RoutedEventArgs e)
+        private async void save_Click(object sender, RoutedEventArgs e)
         {
-            Models.Task task = new Models.Task(pageHeader.Text.Trim(), Description.Text, DateTime.Now, TimeOfAgreement.Date.DateTime, UserInfo.user, performers);
-            ApiWork.AddTask(task);
-            Frame.Navigate(typeof(UsersPage));
+            if (performers.Count < 1)
+            {
+                ContentDialog errorDialog = new ContentDialog()
+                {
+                    Title = "Ошибка",
+                    Content = "Не было добавлено исполнителей",
+                    PrimaryButtonText = "Ок"
+                };
+                ContentDialogResult result = await errorDialog.ShowAsync();
+            }
+            else
+            {
+                if (pageHeader.Text == "" || pageHeader.Text == null || Description.Text == "" || Description.Text == null || TimeOfAgreement.Date.DateTime.Year < 2022)
+                {
+                    ContentDialog errorDialog = new ContentDialog()
+                    {
+                        Title = "Ошибка",
+                        Content = "Заполните все поля",
+                        PrimaryButtonText = "Ок"
+                    };
+                    ContentDialogResult result = await errorDialog.ShowAsync();
+                }
+                else
+                {
+                    Models.Task task = new Models.Task(pageHeader.Text.Trim(), Description.Text, DateTime.Now, TimeOfAgreement.Date.DateTime, UserInfo.user, performers);
+                    ApiWork.AddTask(task);
+                    Frame.Navigate(typeof(UsersPage));
+                }
+            }
+        }
+
+        private async void TimeOfAgreement_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        {
+            if(DateTime.Now > TimeOfAgreement.Date)
+            {
+                ContentDialog errorDialog = new ContentDialog()
+                {
+                    Title = "Ошибка",
+                    Content = "Некорректная дата",
+                    PrimaryButtonText = "Ок"
+                };
+                ContentDialogResult result = await errorDialog.ShowAsync();
+                TimeOfAgreement.Date = DateTime.Now.AddDays(1);
+            }
         }
     }
 }
