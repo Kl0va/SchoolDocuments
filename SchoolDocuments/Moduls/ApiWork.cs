@@ -21,6 +21,14 @@ namespace SchoolDocuments.Moduls
 
             return documents;
         }
+        public static async Task<List<Models.Document>> GetUserDocuments(string id)
+        {
+            var response = await $@"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"/{id}").AppendPathSegment("/documents").GetStringAsync();
+
+            List<Models.Document> documents = JsonConvert.DeserializeObject<List<Models.Document>>(response);
+
+            return documents;
+        }
         
         public static async Task<List<Models.Familiarize>> GetAllFamiliarize(string id)
         {

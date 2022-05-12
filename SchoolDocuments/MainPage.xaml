@@ -14,7 +14,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Image x:Name="logo" HorizontalAlignment="Center" Height="227" Margin="0,100,0,0" VerticalAlignment="Top" Width="241"/>
+            <Image x:Name="logo" HorizontalAlignment="Center" Height="300" Margin="0,100,0,0" VerticalAlignment="Top" Width="300" Stretch="Fill"/>
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

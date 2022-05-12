@@ -45,7 +45,7 @@ namespace SchoolDocuments.General
             documents.Clear();
             documentsforAdd.Clear();
             rootFrame = e.Parameter as Frame;
-            Task<List<Models.Document>> getDocuments = ApiWork.GetAllDocuments();
+            Task<List<Models.Document>> getDocuments = ApiWork.GetUserDocuments(UserInfo.Id);
             await getDocuments.ContinueWith(t =>
             {
                 documents.Clear();

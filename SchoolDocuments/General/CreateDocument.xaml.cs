@@ -129,82 +129,95 @@ namespace SchoolDocuments.General
         private static readonly List<Models.Template> templates1 = new List<Models.Template>();
         private async void save_Click(object sender, RoutedEventArgs e)
         {
-            if (saving)
+            try
             {
-                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
-                File.Create(storageFolder.Path + @"\save.mod.docx").Close();
-
-                StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
-
-                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
-                DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
-                await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                randAccStream.Dispose();
-                documentForSave.file = File.ReadAllBytes(file.Path);
-                ApiWork.SaveDocument(documentForSave);
-                Frame.GoBack();
-            }
-            else if (!string.IsNullOrEmpty(Template.Text))
-            {
-                Task<List<User>> userTask = ApiWork.GetAllUsers();
-                await userTask.ContinueWith(task =>
+                if (saving)
                 {
-                    users.Clear();
-                    foreach (User user in userTask.Result)
-                    {
-                        if (famList.Contains(user.firstName + " " + user.secondName + " " + user.middleName))
-                        {
-                            users.Add(user);
-                        }
-                        if (signerList.Contains(user.firstName + " " + user.secondName + " " + user.middleName))
-                        {
-                            usersSig.Add(user);
-                        }
-                    }
-                });
-                string saveText = "";
-                //Добавление текста
-                DocumentText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out saveText);
-                Document document1 = null;
-                foreach (User user1 in users)
-                {
-                    Familiarize familiarize = new Familiarize(user1, document1, false, DateTime.Now);
-                    famList1.Add(familiarize);
+                    Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                    //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
+                    File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+
+                    StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+
+                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                    DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                    randAccStream.Dispose();
+                    documentForSave.file = File.ReadAllBytes(file.Path);
+                    ApiWork.SaveDocument(documentForSave);
+                    Frame.GoBack();
                 }
-                foreach (User user2 in usersSig)
+                else if (!string.IsNullOrEmpty(Template.SelectedValue.ToString()) && pageHeader.Text.Trim() != "")
                 {
-                    Agreement agreement = new Agreement(user2, document1, TimeOfAgreement.Date.DateTime, AgreementStatus.Sent, "", DateTime.Now);
-                    signerList1.Add(agreement);
-                }
-                await userTask.ContinueWith(task =>
-                {
-                    users.Clear();
-                    foreach (User user in userTask.Result)
+                    Task<List<User>> userTask = ApiWork.GetAllUsers();
+                    await userTask.ContinueWith(task =>
                     {
-                        if (user.id == UserInfo.Id)
+                        users.Clear();
+                        foreach (User user in userTask.Result)
                         {
-                            users.Add(user);
+                            if (famList.Contains(user.firstName + " " + user.secondName + " " + user.middleName))
+                            {
+                                users.Add(user);
+                            }
+                            if (signerList.Contains(user.firstName + " " + user.secondName + " " + user.middleName))
+                            {
+                                usersSig.Add(user);
+                            }
                         }
+                    });
+                    string saveText = "";
+                    //Добавление текста
+                    DocumentText.Document.GetText(Windows.UI.Text.TextGetOptions.None, out saveText);
+                    Document document1 = null;
+                    foreach (User user1 in users)
+                    {
+                        Familiarize familiarize = new Familiarize(user1, document1, false, DateTime.Now);
+                        famList1.Add(familiarize);
                     }
-                });
+                    foreach (User user2 in usersSig)
+                    {
+                        Agreement agreement = new Agreement(user2, document1, TimeOfAgreement.Date.DateTime, AgreementStatus.Sent, "", DateTime.Now);
+                        signerList1.Add(agreement);
+                    }
+                    await userTask.ContinueWith(task =>
+                    {
+                        users.Clear();
+                        foreach (User user in userTask.Result)
+                        {
+                            if (user.id == UserInfo.Id)
+                            {
+                                users.Add(user);
+                            }
+                        }
+                    });
 
-                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
-                File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+                    Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                    //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
+                    File.Create(storageFolder.Path + @"\save.mod.docx").Close();
 
-                StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+                    StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
 
-                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
-                DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
-                await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                randAccStream.Dispose();
+                    Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                    DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                    randAccStream.Dispose();
 
-                Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text.Trim(), File.ReadAllBytes(file.Path), null, famList1, signerList1);
-                ApiWork.AddDocument(document);
-                Frame.GoBack();
+                    Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text.Trim(), File.ReadAllBytes(file.Path), null, famList1, signerList1);
+                    ApiWork.AddDocument(document);
+                    Frame.GoBack();
+                }
+                else
+                {
+                    ContentDialog errorDialog = new ContentDialog()
+                    {
+                        Title = "Ошибка",
+                        Content = "Заполните все поля",
+                        PrimaryButtonText = "Ок"
+                    };
+                    ContentDialogResult result = await errorDialog.ShowAsync();
+                }
             }
-            else
+            catch
             {
                 ContentDialog errorDialog = new ContentDialog()
                 {
