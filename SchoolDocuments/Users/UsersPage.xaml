@@ -17,6 +17,8 @@
 
         <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" FontSize="28"
                     Content="&#xE700;" Click="HamburgerButton_Click" Width="47" Margin="0,0,0,2" VerticalAlignment="Bottom"/>
+        <Button x:Name="Exit" FontFamily="Segoe MDL2 Assets" FontSize="28" HorizontalAlignment="Right"
+                    Content="&#xE711;" Width="47" Margin="0,0,0,2" VerticalAlignment="Bottom" Click="Exit_Click"/>
         <SplitView Name="mySplitView" Grid.Row="1" OpenPaneLength="230" DisplayMode="CompactOverlay" CompactPaneLength="48">
             <SplitView.Pane>
                 <ListBox x:Name="listOfNavigation" SelectionMode="Single" SelectionChanged="ListBox_SelectionChanged">

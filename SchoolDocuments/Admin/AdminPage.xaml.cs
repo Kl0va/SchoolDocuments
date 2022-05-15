@@ -71,5 +71,13 @@ namespace SchoolDocuments.Admin
         {
             NavigateDocuments();
         }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            MainPage.exiting = true;
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            File.WriteAllText(storageFolder.Path + @"\auth.txt", "");
+            Frame.Navigate(typeof(MainPage));
+        }
     }
 }

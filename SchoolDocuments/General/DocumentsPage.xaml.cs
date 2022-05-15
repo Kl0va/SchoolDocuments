@@ -67,7 +67,7 @@ namespace SchoolDocuments.General
 
         private void search_TextChanged(object sender, TextChangedEventArgs e)
         {
-            documentsSearch.Clear();
+            documentsSearch.Clear();           
             if (search.Text == "")
             {
                 documentsGrid.ItemsSource = documentsforAdd;
@@ -86,9 +86,26 @@ namespace SchoolDocuments.General
             }
         }
 
-        private void documentsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void documentsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            rootFrame.Navigate(typeof(CreateDocument), (Document)documentsGrid.SelectedItem);
+            Document document1 = (Document)documentsGrid.SelectedItem;
+            if (document1 != null)
+            {
+                if (document1.extension != "rtf")
+                {
+                    ContentDialog errorDialog = new ContentDialog()
+                    {
+                        Title = "Ошибка",
+                        Content = "Данный файл не поддерживается",
+                        PrimaryButtonText = "Ок"
+                    };
+                    ContentDialogResult result = await errorDialog.ShowAsync();
+                }
+                else
+                {
+                    rootFrame.Navigate(typeof(CreateDocument), (Document)documentsGrid.SelectedItem);
+                }
+            }
         }
     }
 }

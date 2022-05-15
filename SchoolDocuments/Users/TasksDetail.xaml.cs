@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -218,43 +219,59 @@ namespace SchoolDocuments.Users
                 {
                     if (Agreement.SelectedItem.ToString() == performer.user.firstName + " " + performer.user.secondName + " " + performer.user.middleName)
                     {
+                        List<Document> documents = performer.documents;
+                        foreach(Document document in documents)
+                        {
+                            if(document.extension != "rtf")
+                            {
+                                ContentDialog errorDialog = new ContentDialog()
+                                {
+                                    Title = "Ошибка",
+                                    Content = "Данный файл не поддерживается",
+                                    PrimaryButtonText = "Ок"
+                                };
+                                ContentDialogResult result = await errorDialog.ShowAsync();
+                            }
+                            else
+                            {
+                                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                                File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", performer.documents[0].file.ToArray());
+                                StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+                                Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+                                Inp.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
+                                randAccStream.Dispose();
 
-                        Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                        File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", performer.documents[0].file.ToArray());
-                        StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
-                        Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-                        Inp.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
-                        randAccStream.Dispose();
 
+                                Windows.Storage.Streams.IRandomAccessStream randAccStream1 = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+                                Inp.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream1);
+                                await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
 
-                        Windows.Storage.Streams.IRandomAccessStream randAccStream1 = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-                        Inp.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream1);
-                        await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                                document1.Open(randAccStream1.AsStream(), FormatType.Rtf);
 
-                        document1.Open(randAccStream1.AsStream(), FormatType.Rtf);
+                                WParagraphStyle style = document1.AddParagraphStyle("Normal") as WParagraphStyle;
+                                style.CharacterFormat.FontName = "Times New Roman";
+                                style.CharacterFormat.FontSize = 12f;
+                                style.ParagraphFormat.BeforeSpacing = 0;
+                                style.ParagraphFormat.LineSpacing = 13.8f;
 
-                        WParagraphStyle style = document1.AddParagraphStyle("Normal") as WParagraphStyle;
-                        style.CharacterFormat.FontName = "Times New Roman";
-                        style.CharacterFormat.FontSize = 12f;
-                        style.ParagraphFormat.BeforeSpacing = 0;
-                        style.ParagraphFormat.LineSpacing = 13.8f;
+                                style.CharacterFormat.TextColor = Syncfusion.DocIO.DLS.Color.Black;
+                                style.ParagraphFormat.BeforeSpacing = 12;
+                                style.ParagraphFormat.AfterSpacing = 0;
+                                style.ParagraphFormat.Keep = true;
+                                style.ParagraphFormat.KeepFollow = true;
+                                style.ParagraphFormat.OutlineLevel = Syncfusion.DocIO.OutlineLevel.Level1;
 
-                        style.CharacterFormat.TextColor = Syncfusion.DocIO.DLS.Color.Black;
-                        style.ParagraphFormat.BeforeSpacing = 12;
-                        style.ParagraphFormat.AfterSpacing = 0;
-                        style.ParagraphFormat.Keep = true;
-                        style.ParagraphFormat.KeepFollow = true;
-                        style.ParagraphFormat.OutlineLevel = Syncfusion.DocIO.OutlineLevel.Level1;
+                                IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
+                                paragraph.ApplyStyle("Normal");
+                                paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+                                paragraph = section.AddParagraph();
 
-                        IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
-                        paragraph.ApplyStyle("Normal");
-                        paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
-                        paragraph = section.AddParagraph();
-
-                        MemoryStream memoryStream = new MemoryStream();
-                        await document1.SaveAsync(memoryStream, FormatType.Rtf);
-                        Save(memoryStream, "Document.rtf");
-                        randAccStream1.Dispose();
+                                MemoryStream memoryStream = new MemoryStream();
+                                await document1.SaveAsync(memoryStream, FormatType.Rtf);
+                                Save(memoryStream, "Document.rtf");
+                                randAccStream1.Dispose();
+                            }
+                        }
                     }
                 }
             }

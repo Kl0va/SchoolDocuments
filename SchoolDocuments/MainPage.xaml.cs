@@ -26,6 +26,9 @@ using Windows.UI.Xaml.Media.Imaging;
 using SchoolDocuments.Moduls;
 using System.Threading.Tasks;
 using Windows.UI.ViewManagement;
+using System.Xml.Linq;
+using System.Threading;
+using SchoolDocuments.Users;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -47,18 +50,75 @@ namespace SchoolDocuments
 
         public MainPage()
         {
-            this.InitializeComponent();
-            ApplicationView.GetForCurrentView().TryResizeView(new Size(1920,1080));
+            try
+            {
+                this.InitializeComponent();
+                ApplicationView.GetForCurrentView().TryResizeView(new Size(1920, 1080));
+                if (!exiting) 
+                { 
+                    MainTask(); 
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        public static bool exiting;
+
+        public async void MainTask()
+        {
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            string id = File.ReadAllText(storageFolder.Path + @"\auth.txt");
+            if (id != "")
+            {
+                Task<Models.User> getDocuments = ApiWork.GetUserInfo(id);
+                await getDocuments.ContinueWith(t =>
+                {
+                    UserInfo.user = getDocuments.Result;
+                    UserInfo.Email = UserInfo.user.email;
+                    UserInfo.Id = UserInfo.user.id;
+                });
+
+
+                if (UserInfo.user.role == "Admin")
+                {
+                    ContentDialog errorDialog = new ContentDialog()
+                    {
+                        Title = "Выбор",
+                        Content = "Выберите, кем авторизоваться",
+                        PrimaryButtonText = "Администратор",
+                        SecondaryButtonText = "Сотрудник"
+                    };
+                    ContentDialogResult result = await errorDialog.ShowAsync();
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        Frame.Navigate(typeof(AdminPage));
+                    }
+                    else if (result == ContentDialogResult.Secondary)
+                    {
+                        Frame.Navigate(typeof(Users.UsersPage));
+                    }
+                }
+                else if (UserInfo.user.role == "Employee" || UserInfo.user.role == null)
+                {
+                    Frame.Navigate(typeof(UsersPage));
+                }
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
-        }
 
+        }
+        private static bool remember;
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+            if (RememberMe.IsChecked.Value == true)
+            {
+                remember = true;
+            }
             // Generates state and PKCE values.
             string state = randomDataBase64url(32);
             string code_verifier = randomDataBase64url(32);
@@ -91,6 +151,10 @@ namespace SchoolDocuments
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (exiting)
+            {
+                exiting = false;
+            }
             var isDark = Application.Current.RequestedTheme == ApplicationTheme.Dark;
             if (isDark)
             {
@@ -164,75 +228,88 @@ namespace SchoolDocuments
 
         async void performCodeExchangeAsync(string code, string code_verifier)
         {
-            // Builds the Token request
-            string tokenRequestBody = string.Format("code={0}&redirect_uri={1}&client_id={2}&code_verifier={3}&scope=&grant_type=authorization_code",
-                code,
-                System.Uri.EscapeDataString(redirectURI),
-                clientID,
-                code_verifier
-                );
-            StringContent content = new StringContent(tokenRequestBody, Encoding.UTF8, "application/x-www-form-urlencoded");
-
-            // Performs the authorization code exchange.
-            HttpClientHandler handler = new HttpClientHandler();
-            handler.AllowAutoRedirect = true;
-            HttpClient client = new HttpClient(handler);
-
-            output(Environment.NewLine + "Exchanging code for tokens...");
-            HttpResponseMessage response = await client.PostAsync(tokenEndpoint, content);
-            string responseString = await response.Content.ReadAsStringAsync();
-            output(responseString);
-
-            if (!response.IsSuccessStatusCode)
+            if (!exiting)
             {
-                output("Authorization code exchange failed.");
-                return;
-            }
+                // Builds the Token request
+                string tokenRequestBody = string.Format("code={0}&redirect_uri={1}&client_id={2}&code_verifier={3}&scope=&grant_type=authorization_code",
+                    code,
+                    System.Uri.EscapeDataString(redirectURI),
+                    clientID,
+                    code_verifier
+                    );
+                StringContent content = new StringContent(tokenRequestBody, Encoding.UTF8, "application/x-www-form-urlencoded");
 
-            // Sets the Authentication header of our HTTP client using the acquired access token.
-            JsonObject tokens = JsonObject.Parse(responseString);
-            string accessToken = tokens.GetNamedString("access_token");
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+                // Performs the authorization code exchange.
+                HttpClientHandler handler = new HttpClientHandler();
+                handler.AllowAutoRedirect = true;
+                HttpClient client = new HttpClient(handler);
 
-            // Makes a call to the Userinfo endpoint, and prints the results.
-            output("Making API Call to Userinfo...");
-            HttpResponseMessage userinfoResponse = client.GetAsync(userInfoEndpoint).Result;
-            string userinfoResponseContent = await userinfoResponse.Content.ReadAsStringAsync();
+                output(Environment.NewLine + "Exchanging code for tokens...");
+                HttpResponseMessage response = await client.PostAsync(tokenEndpoint, content);
+                string responseString = await response.Content.ReadAsStringAsync();
+                output(responseString);
 
-
-            JObject js = JObject.Parse(userinfoResponseContent);
-            UserInfo.Id = js.Value<string>("sub");
-
-            Task<Models.User> getDocuments = ApiWork.GetUserInfo(UserInfo.Id);
-            await getDocuments.ContinueWith(t =>
-            {
-                UserInfo.user = getDocuments.Result;
-            });
-            UserInfo.Email = UserInfo.user.email;
-            if (UserInfo.user.role == "Admin")
-            {
-                ContentDialog errorDialog = new ContentDialog()
+                if (!response.IsSuccessStatusCode)
                 {
-                    Title = "Выбор",
-                    Content = "Выберите, кем авторизоваться",
-                    PrimaryButtonText = "Администратор",
-                    SecondaryButtonText = "Сотрудник"
-                };
-                ContentDialogResult result = await errorDialog.ShowAsync();
-                if (result == ContentDialogResult.Primary)
-                {
-                    Frame.Navigate(typeof(AdminPage));
+                    output("Authorization code exchange failed.");
+                    return;
                 }
-                else if (result == ContentDialogResult.Secondary)
+
+                // Sets the Authentication header of our HTTP client using the acquired access token.
+                JsonObject tokens = JsonObject.Parse(responseString);
+                string accessToken = tokens.GetNamedString("access_token");
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+                // Makes a call to the Userinfo endpoint, and prints the results.
+                output("Making API Call to Userinfo...");
+                HttpResponseMessage userinfoResponse = client.GetAsync(userInfoEndpoint).Result;
+                string userinfoResponseContent = await userinfoResponse.Content.ReadAsStringAsync();
+
+
+                JObject js = JObject.Parse(userinfoResponseContent);
+                UserInfo.Id = js.Value<string>("sub");
+
+                Task<Models.User> getDocuments = ApiWork.GetUserInfo(UserInfo.Id);
+                await getDocuments.ContinueWith(t =>
+                {
+                    UserInfo.user = getDocuments.Result;
+                });
+                UserInfo.Email = UserInfo.user.email;
+
+                if (remember)
+                {
+                    Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                    File.WriteAllText(storageFolder.Path + @"\auth.txt", UserInfo.user.id);
+                }
+                if (UserInfo.user.role == "Admin")
+                {
+                    ContentDialog errorDialog = new ContentDialog()
+                    {
+                        Title = "Выбор",
+                        Content = "Выберите, кем авторизоваться",
+                        PrimaryButtonText = "Администратор",
+                        SecondaryButtonText = "Сотрудник"
+                    };
+                    ContentDialogResult result = await errorDialog.ShowAsync();
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        Frame.Navigate(typeof(AdminPage));
+                    }
+                    else if (result == ContentDialogResult.Secondary)
+                    {
+                        Frame.Navigate(typeof(Users.UsersPage));
+                    }
+                }
+                else if (UserInfo.user.role == "Employee" || UserInfo.user.role == null)
                 {
                     Frame.Navigate(typeof(Users.UsersPage));
                 }
+                output(userinfoResponseContent);
             }
-            else if (UserInfo.user.role == "Employee" || UserInfo.user.role == null)
+            else
             {
-                Frame.Navigate(typeof(Users.UsersPage));
+                exiting = false;
             }
-            output(userinfoResponseContent);
         }
 
         /// <summary>
