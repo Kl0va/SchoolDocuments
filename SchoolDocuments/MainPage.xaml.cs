@@ -265,7 +265,9 @@ namespace SchoolDocuments
                 HttpResponseMessage userinfoResponse = client.GetAsync(userInfoEndpoint).Result;
                 string userinfoResponseContent = await userinfoResponse.Content.ReadAsStringAsync();
 
+                JObject js1 = JObject.Parse(responseString);
 
+                ApiWork.Login(js1.Value<string>("id_token"));
                 JObject js = JObject.Parse(userinfoResponseContent);
                 UserInfo.Id = js.Value<string>("sub");
 

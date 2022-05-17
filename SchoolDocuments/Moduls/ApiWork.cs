@@ -12,7 +12,8 @@ namespace SchoolDocuments.Moduls
 {
     class ApiWork
     {
-        private static string baseUrl = "https://api.ok654.org";
+        private static string baseUrl = "http://api.ok654.org:8081";
+        public static async void Login(string id) => await $"{baseUrl}".AppendPathSegment("/login").PostJsonAsync(id).ReceiveString();
         public static async Task<List<Models.Document>> GetAllDocuments()
         {
             var response = await $@"{baseUrl}".AppendPathSegment("/documents").GetStringAsync();
@@ -73,7 +74,7 @@ namespace SchoolDocuments.Moduls
         }
         public static async Task<User> GetUserInfo(string id)
         {
-            var response = await $@"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"/{id}").GetStringAsync();
+            var response = await $@"{baseUrl}".AppendPathSegment("/user").AppendPathSegment($"{id}").GetStringAsync();
 
             User documents = JsonConvert.DeserializeObject<User>(response);
 
