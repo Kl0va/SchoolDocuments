@@ -42,9 +42,16 @@ namespace SchoolDocuments.Users
             await getDocuments.ContinueWith(t =>
             {
                 documents.Clear();
-                foreach (Models.Familiarize document in getDocuments.Result)
+                if (getDocuments.Result == null)
                 {
-                    documents.Add(document);
+                    
+                }
+                else
+                {
+                    foreach (Models.Familiarize document in getDocuments.Result)
+                    {
+                        documents.Add(document);
+                    }
                 }
             });
             var orderedDocuments = from p in documents orderby p.familiarized select p;

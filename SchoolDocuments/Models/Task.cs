@@ -16,9 +16,10 @@ namespace SchoolDocuments.Models
         public DateTime deadline { get; set; }
         public User author { get; set; }
         public List<Performer> performs { get; set; }
+        public List<Document> documents { get; set; }
 
         [JsonConstructor]
-        public Task(string Title,string Desc,DateTime Created,DateTime Deadline,User AuthorId,List<Performer> Performers)
+        public Task(string Title,string Desc,DateTime Created,DateTime Deadline,User AuthorId,List<Performer> Performers, List<Document> Document)
         {
             title = Title;
             desc = Desc;
@@ -26,6 +27,7 @@ namespace SchoolDocuments.Models
             deadline = Deadline;
             author = AuthorId;
             performs = Performers;
+            documents = Document;
         }
     }
 }

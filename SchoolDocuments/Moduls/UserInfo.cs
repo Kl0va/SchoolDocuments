@@ -9,6 +9,7 @@ namespace SchoolDocuments.Moduls
 {
     class UserInfo
     {
+        public static string token {get;set;}
         public static User user { get; set; }
         public static string Email { get; set; }
         public static string Id { get; set; }

@@ -1,4 +1,5 @@
 ﻿using SchoolDocuments.General;
+using SchoolDocuments.Moduls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -93,6 +94,7 @@ namespace SchoolDocuments.Users
             MainPage.exiting = true;
             Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
             File.WriteAllText(storageFolder.Path + @"\auth.txt","");
+            ApiWork.Logout();
             Frame.Navigate(typeof(MainPage));
         }
     }

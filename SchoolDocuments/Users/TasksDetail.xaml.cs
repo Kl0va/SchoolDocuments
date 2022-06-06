@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -161,7 +162,7 @@ namespace SchoolDocuments.Users
             Frame.Navigate(typeof(UsersPage));
         }
         private static List<Document> document = new List<Document>();
-        private void Finished_Click(object sender, RoutedEventArgs e)
+        private async void Finished_Click(object sender, RoutedEventArgs e)
         {
             Models.Performer idPerf = task.performs.Where(x => x.user.email == UserInfo.Email).Single();
             ApiWork.PutTaskStatus(idPerf.id, Models.PerformerStatus.Completed);
@@ -171,8 +172,17 @@ namespace SchoolDocuments.Users
             }
             if (document.Count > 0)
             {
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                StorageFile file1 = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
+                Windows.Storage.Streams.IRandomAccessStream randAccStream1 = await file1.OpenAsync(FileAccessMode.ReadWrite);
+                Inp.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream1);
+                await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file1);
                 performer.id = idPerf.id;
-                ApiWork.AddDocumentToPerformer(document[0], performer);
+                Document document1 = document[0];
+                randAccStream1.Dispose();
+                Models.File file = new Models.File("Prik", System.IO.File.ReadAllBytes(file1.Path));
+                DocumentWithFile documentWithFile = new DocumentWithFile(document1,file);
+                ApiWork.AddDocumentToPerformer(documentWithFile, performer);
             }
             Frame.Navigate(typeof(UsersPage));
         }
@@ -207,7 +217,8 @@ namespace SchoolDocuments.Users
                     List<Familiarize> familiarizes = new List<Familiarize>();
                     List<Agreement> agreements = new List<Agreement>();
 
-                    Document doc = new Document(null, UserInfo.user, "Prik", File.ReadAllBytes(file1.Path), "", familiarizes, agreements);
+                    ///Тут надо сто раз подумать че это
+                    Document doc = new Document(null, UserInfo.user, "Prik", "", familiarizes, agreements);
                     document.Add(doc);
                     performer = new Performer(UserInfo.user, document);
                     AttachStatus.Visibility = Visibility.Visible;
@@ -222,7 +233,13 @@ namespace SchoolDocuments.Users
                         List<Document> documents = performer.documents;
                         foreach(Document document in documents)
                         {
-                            if(document.extension != "rtf")
+                            string ext = "";
+                            Task<Models.File> task = ApiWork.GetUserDocumentsFile(document.id);
+                            await task.ContinueWith(task1 =>
+                            {
+                                ext = task1.Result.extension;
+                            });
+                            if(ext != "rtf")
                             {
                                 ContentDialog errorDialog = new ContentDialog()
                                 {
@@ -234,8 +251,14 @@ namespace SchoolDocuments.Users
                             }
                             else
                             {
+                                byte[] files = null;
+                                Task<Models.File> tasks = ApiWork.GetUserDocumentsFile(performer.documents[0].id);
+                                await tasks.ContinueWith(task1 =>
+                                {
+                                    files = task1.Result.file;
+                                });
                                 Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                                File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", performer.documents[0].file.ToArray());
+                                System.IO.File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx",files.ToArray());
                                 StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
                                 Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
                                 Inp.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);

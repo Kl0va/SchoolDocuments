@@ -29,6 +29,10 @@ using Windows.UI.ViewManagement;
 using System.Xml.Linq;
 using System.Threading;
 using SchoolDocuments.Users;
+using Flurl.Http;
+using Flurl;
+using SchoolDocuments.Models;
+using Newtonsoft.Json;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -70,9 +74,11 @@ namespace SchoolDocuments
         public async void MainTask()
         {
             Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            string id = File.ReadAllText(storageFolder.Path + @"\auth.txt");
+            string id = System.IO.File.ReadAllText(storageFolder.Path + @"\auth.txt");
             if (id != "")
             {
+                ApiWork.Login(id);
+                Thread.Sleep(500);
                 Task<Models.User> getDocuments = ApiWork.GetUserInfo(id);
                 await getDocuments.ContinueWith(t =>
                 {
@@ -266,22 +272,25 @@ namespace SchoolDocuments
                 string userinfoResponseContent = await userinfoResponse.Content.ReadAsStringAsync();
 
                 JObject js1 = JObject.Parse(responseString);
+                string token = js1.Value<string>("id_token");
 
                 ApiWork.Login(js1.Value<string>("id_token"));
                 JObject js = JObject.Parse(userinfoResponseContent);
                 UserInfo.Id = js.Value<string>("sub");
 
-                Task<Models.User> getDocuments = ApiWork.GetUserInfo(UserInfo.Id);
-                await getDocuments.ContinueWith(t =>
+                Thread.Sleep(1500);
+                Task<Models.User> getUser = ApiWork.GetUserInfo(UserInfo.Id);
+                await getUser.ContinueWith(t =>
                 {
-                    UserInfo.user = getDocuments.Result;
+                    UserInfo.user = getUser.Result;
                 });
+
                 UserInfo.Email = UserInfo.user.email;
 
                 if (remember)
                 {
                     Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                    File.WriteAllText(storageFolder.Path + @"\auth.txt", UserInfo.user.id);
+                    System.IO.File.WriteAllText(storageFolder.Path + @"\auth.txt", UserInfo.user.id);
                 }
                 if (UserInfo.user.role == "Admin")
                 {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -61,9 +62,12 @@ namespace SchoolDocuments.Users
             await getTasks.ContinueWith(t =>
             {
                 tasks.Clear();
-                foreach (Models.Task task in getTasks.Result)
+                if (getTasks.Result != null)
                 {
-                    tasks.Add(task);
+                    foreach (Models.Task task in getTasks.Result)
+                    {
+                        tasks.Add(task);
+                    }
                 }
             });
             var orderedDocuments = from p in tasks orderby p.deadline select p;

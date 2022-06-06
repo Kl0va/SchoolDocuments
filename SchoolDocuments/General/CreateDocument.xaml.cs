@@ -76,6 +76,8 @@ namespace SchoolDocuments.General
             {
                 Template.Items.Add(template1.name);
             }
+            var itemToDelete = users.Where(x => x.email == UserInfo.Email);
+            users.Remove(itemToDelete.First());
             List<string> FIO = new List<string>();
             foreach (User user1 in users)
             {
@@ -83,6 +85,7 @@ namespace SchoolDocuments.General
             }
             if (!saving)
             {
+
                 foreach (string fio in FIO)
                 {
                     Signatory.Items.Add(fio);
@@ -135,7 +138,7 @@ namespace SchoolDocuments.General
                 {
                     Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
                     //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
-                    File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+                    System.IO.File.Create(storageFolder.Path + @"\save.mod.docx").Close();
 
                     StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
 
@@ -143,8 +146,8 @@ namespace SchoolDocuments.General
                     DocumentText.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
                     await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                     randAccStream.Dispose();
-                    documentForSave.file = File.ReadAllBytes(file.Path);
-                    ApiWork.SaveDocument(documentForSave);
+                    Models.File file1 = new Models.File("Test", System.IO.File.ReadAllBytes(file.Path));
+                    ApiWork.SaveDocument(file1,documentForSave.id);
                     Frame.GoBack();
                 }
                 else if (!string.IsNullOrEmpty(Template.SelectedValue.ToString()) && pageHeader.Text.Trim() != "")
@@ -193,7 +196,7 @@ namespace SchoolDocuments.General
 
                     Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
                     //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
-                    File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+                    System.IO.File.Create(storageFolder.Path + @"\save.mod.docx").Close();
 
                     StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
 
@@ -202,8 +205,10 @@ namespace SchoolDocuments.General
                     await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
                     randAccStream.Dispose();
 
-                    Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text.Trim(), File.ReadAllBytes(file.Path), null, famList1, signerList1);
-                    ApiWork.AddDocument(document);
+                    Document document = new Document(Template.SelectedValue.ToString(), users[0], pageHeader.Text.Trim(), null, famList1, signerList1);
+                    Models.File file1 = new Models.File(pageHeader.Text.Trim(), System.IO.File.ReadAllBytes(file.Path));
+                    DocumentWithFile documentWith = new DocumentWithFile(document,file1);
+                    ApiWork.AddDocument(documentWith);
                     Frame.GoBack();
                 }
                 else
@@ -266,7 +271,7 @@ namespace SchoolDocuments.General
             foreach (Models.Template template1 in searchTemplate)
             {
                 Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", template1.file.ToArray());
+                System.IO.File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", template1.file.ToArray());
                 StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
                 Windows.Storage.Streams.IRandomAccessStream randAccStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
                 DocumentText.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
@@ -309,15 +314,20 @@ namespace SchoolDocuments.General
             
             if (e.Parameter != null)
             {
+                
                 Models.Document template = e.Parameter as Models.Document;
                 documentForSave = e.Parameter as Models.Document;
                 agreements = template.agreement;
-                testByte = template.file;
+                Task<Models.File> file1 = ApiWork.GetUserDocumentsFile(template.id);
+                await file1.ContinueWith(file2 =>
+                {
+                    testByte = file2.Result.file;
+                });
                 familiarizes = template.familiarize;
                 document2 = e.Parameter as Document;
                 Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
-                File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", template.file.ToArray());
+                System.IO.File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", testByte.ToArray());
                 StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
                 Windows.Storage.Streams.IRandomAccessStream randAccStream =
                 await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
@@ -335,6 +345,7 @@ namespace SchoolDocuments.General
                 add_agreed.Visibility = Visibility.Collapsed;
                 time.Visibility = Visibility.Collapsed;
                 Comment.Visibility = Visibility.Visible;
+                delete.Visibility = Visibility.Visible;
 
                 Agreement.Items.Clear();
                 fios.Clear();
@@ -447,7 +458,7 @@ namespace SchoolDocuments.General
         private async void SaveDoc_Click(object sender, RoutedEventArgs e)
         {
             Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            File.Create(storageFolder.Path + @"\save.mod.docx").Close();
+            System.IO.File.Create(storageFolder.Path + @"\save.mod.docx").Close();
 
             StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
 
@@ -509,6 +520,12 @@ namespace SchoolDocuments.General
                     }
                 }
             }
+        }
+
+        private void delete_Click(object sender, RoutedEventArgs e)
+        {
+            ApiWork.DeleteDocument(documentForSave.id);
+            Frame.GoBack();
         }
     }
 }

@@ -115,8 +115,11 @@ namespace SchoolDocuments.Users
                 }
                 else
                 {
-                    Models.Task task = new Models.Task(pageHeader.Text.Trim(), Description.Text, DateTime.Now, TimeOfAgreement.Date.DateTime, UserInfo.user, performers);
-                    ApiWork.AddTask(task);
+                    List<Models.Document> docs = new List<Document>();
+                    Models.Task task = new Models.Task(pageHeader.Text.Trim(), Description.Text, DateTime.Now, TimeOfAgreement.Date.DateTime, UserInfo.user, performers,docs);
+                    List<Models.File> file = new List<Models.File>();
+                    Models.TaskWithFiles taskWithFile = new TaskWithFiles(task,file);
+                    ApiWork.AddTask(taskWithFile);
                     Frame.Navigate(typeof(UsersPage));
                 }
             }

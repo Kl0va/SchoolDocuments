@@ -88,10 +88,16 @@ namespace SchoolDocuments.General
 
         private async void documentsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            string ext = "";
             Document document1 = (Document)documentsGrid.SelectedItem;
             if (document1 != null)
             {
-                if (document1.extension != "rtf")
+                Task<Models.File> file = ApiWork.GetUserDocumentsFile(document1.id);
+                await file.ContinueWith(file1 =>
+                {
+                    ext = file1.Result.extension;
+                });
+                if (ext != "rtf")
                 {
                     ContentDialog errorDialog = new ContentDialog()
                     {

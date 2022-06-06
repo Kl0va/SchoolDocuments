@@ -28,11 +28,17 @@
                     <TextBlock>Сохранить</TextBlock>
                 </StackPanel>
             </Button>
-            
+
             <Button CornerRadius="10" Grid.Column="0" x:Name="SaveDoc" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" Click="SaveDoc_Click" Visibility="Collapsed">
                 <StackPanel>
                     <TextBlock HorizontalAlignment="Center" Text="&#xE838;" FontFamily="Segoe MDL2 Assets" ></TextBlock>
                     <TextBlock>Скачать</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button CornerRadius="10" Grid.Column="2" HorizontalAlignment="Right" x:Name="delete" FontSize="25" Margin="349,0,0,0" Click="delete_Click" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Center" Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" />
+                    <TextBlock><Run Text="Удалить"/></TextBlock>
                 </StackPanel>
             </Button>
 

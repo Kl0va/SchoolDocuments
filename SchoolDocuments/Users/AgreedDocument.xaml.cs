@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -47,7 +48,13 @@ namespace SchoolDocuments.Users
                 pageHeader.Text = familiarize.document.title;
                 Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
-                File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", familiarize.document.file.ToArray());
+                byte[] files = null;
+                Task<Models.File> task = ApiWork.GetUserDocumentsFile(familiarize.document.id);
+                await task.ContinueWith(task1 =>
+                {
+                    files = task1.Result.file;
+                });
+                System.IO.File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", files.ToArray());
                 StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
                 Windows.Storage.Streams.IRandomAccessStream randAccStream =
                 await file.OpenAsync(Windows.Storage.FileAccessMode.Read);

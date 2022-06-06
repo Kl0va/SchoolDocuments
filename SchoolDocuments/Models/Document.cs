@@ -14,24 +14,19 @@ namespace SchoolDocuments.Models
         public string templateId { get; set; }
         public User author { get; set; }
         public string title { get; set; }
-        [JsonConverter(typeof(BytesConverter))]
-        public byte[] file { get; set; }
         public string desc { get; set; }
-        public string extension { get; set; }
         public List<Familiarize> familiarize { get; set; }
         public List<Agreement> agreement { get; set; }
 
         [JsonConstructor]
-        public Document(string TemplateId,User AuthorId,string Title,byte[] File,string Desc,List<Familiarize> Familiarize,List<Agreement> Agreement)
+        public Document(string TemplateId,User AuthorId,string Title,string Desc,List<Familiarize> Familiarize,List<Agreement> Agreement)
         {
             templateId = TemplateId;
             author = AuthorId;
             title = Title;
-            file = File;
             desc = Desc;
             familiarize = Familiarize;
             agreement = Agreement;
-            extension = "rtf";
         }
     }
 }
