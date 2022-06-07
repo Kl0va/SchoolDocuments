@@ -29,16 +29,26 @@ namespace SchoolDocuments.General
         private static readonly List<Models.Document> documentsforAdd = new List<Models.Document>();
         private static readonly List<Models.Document> documentsSearch = new List<Models.Document>();
         Frame rootFrame;
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public DocumentsPage()
         {
             this.InitializeComponent();
         }
-
+        /// <summary>
+        /// Переход на страницу добавления документа
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addDocument_Click(object sender, RoutedEventArgs e)
         {
             rootFrame.Navigate(typeof(CreateDocument));
         }
-
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             progress.Visibility = Visibility.Visible;
@@ -64,7 +74,11 @@ namespace SchoolDocuments.General
             documentsGrid.ItemsSource = documentsforAdd;
             progress.Visibility = Visibility.Collapsed;
         }
-
+        /// <summary>
+        /// Поиск документов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void search_TextChanged(object sender, TextChangedEventArgs e)
         {
             documentsSearch.Clear();           
@@ -85,7 +99,11 @@ namespace SchoolDocuments.General
                 documentsGrid.ItemsSource = documentsSearch;
             }
         }
-
+        /// <summary>
+        /// Выбор документа из списка
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void documentsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string ext = "";

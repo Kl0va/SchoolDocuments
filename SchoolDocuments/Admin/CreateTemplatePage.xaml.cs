@@ -33,11 +33,17 @@ namespace SchoolDocuments.Admin
     public sealed partial class CreateTemplatePage : Page
     {
         private static bool saving = false;
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public CreateTemplatePage()
         {
             this.InitializeComponent();
         }
-
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
@@ -61,6 +67,11 @@ namespace SchoolDocuments.Admin
         public static WordDocument document = new WordDocument();
         public static WSection section = document.AddSection() as WSection;
         private static readonly List<Models.Template> templates = new List<Models.Template>();
+        /// <summary>
+        /// Сохранение/изменение шаблона
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void save_Click(object sender, RoutedEventArgs e)
         {
             string checkText = "";
@@ -197,7 +208,6 @@ namespace SchoolDocuments.Admin
                             MemoryStream stream1 = new MemoryStream();
                             await document.SaveAsync(stream1, FormatType.Docx);
                             //Saves the stream as Word file in local machine
-                            //  Save(stream1, "RtfToWord.docx");
                             //Closes the Word document
                             document.Close();
                             Frame.Navigate(typeof(AdminPage));
@@ -216,7 +226,11 @@ namespace SchoolDocuments.Admin
                 ContentDialogResult result = await errorDialog.ShowAsync();
             }
         }
-
+        /// <summary>
+        /// Сохранение файла
+        /// </summary>
+        /// <param name="streams"></param>
+        /// <param name="filename"></param>
         async void Save(MemoryStream streams, string filename)
         {
             streams.Position = 0;
@@ -248,7 +262,11 @@ namespace SchoolDocuments.Admin
                 Frame.Navigate(typeof(AdminPage));
             }
         }
-
+        /// <summary>
+        /// Открытие файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void open_Click(object sender, RoutedEventArgs e)
         {
             Windows.Storage.Pickers.FileOpenPicker open = new Windows.Storage.Pickers.FileOpenPicker();

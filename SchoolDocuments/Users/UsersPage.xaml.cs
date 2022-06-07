@@ -25,11 +25,18 @@ namespace SchoolDocuments.Users
     public sealed partial class UsersPage : Page
     {
         private static string email;
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public UsersPage()
         {
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if(e.Parameter != null)
@@ -38,16 +45,22 @@ namespace SchoolDocuments.Users
             }
             NavigateDocuments();
         }
-        private void Settings_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
 
+        /// <summary>
+        /// Открытие всплывающего окна
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             mySplitView.IsPaneOpen = !mySplitView.IsPaneOpen;
         }
 
+        /// <summary>
+        /// Проверка выбора
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (documents.IsSelected)
@@ -67,28 +80,44 @@ namespace SchoolDocuments.Users
                 NavigateTask();
             }
         }
-
+        /// <summary>
+        /// Переход на страницу ознакомления
+        /// </summary>
         public void NavigateDocuments()
         {
             myFrame.Navigate(typeof(FamiliarizeDocuments), Frame);
             pageHeader.Text = "На ознакомление";
         }
+        /// <summary>
+        /// Переход на страницу согласований/подписаний документов
+        /// </summary>
         public void NavigateAgreement()
         {
             myFrame.Navigate(typeof(AgreeDocuments), Frame);
             pageHeader.Text = "Согласование/подписание";
         }
+        /// <summary>
+        /// Переход на страницу документов
+        /// </summary>
         public void NavigateDoc()
         {
             myFrame.Navigate(typeof(DocumentsPage), Frame);
             pageHeader.Text = "Документы";
         }
+        /// <summary>
+        /// Переход на страницу заданий
+        /// </summary>
         public void NavigateTask()
         {
             myFrame.Navigate(typeof(Task), Frame);
             pageHeader.Text = "Задания";
         }
 
+        /// <summary>
+        /// Выход
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             MainPage.exiting = true;

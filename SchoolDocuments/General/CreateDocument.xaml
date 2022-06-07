@@ -72,7 +72,7 @@
                         <ColumnDefinition Width="0.3*"/>
                     </Grid.ColumnDefinitions>
                     <ComboBox HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="42" Width="429" x:Name="Template" SelectionChanged="Template_SelectionChanged"></ComboBox>
-                    <ComboBox x:Name="Signatory" Height="42" Width="429" Margin="0,15,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" SelectionChanged="Signatory_SelectionChanged">
+                    <ComboBox x:Name="Signatory" Height="42" Width="429" Margin="0,15,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                     </ComboBox>
                 </Grid>
                 <DatePicker x:Name="TimeOfAgreement" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="429" Margin="0,166,0,0"/>

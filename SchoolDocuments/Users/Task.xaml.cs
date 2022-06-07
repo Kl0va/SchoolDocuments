@@ -29,31 +29,48 @@ namespace SchoolDocuments.Users
         List<Models.Task> tasks = new List<Models.Task>();
         List<Models.Task> tasksSearch = new List<Models.Task>();
         List<Models.Task> tasksChange = new List<Models.Task>();
+
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public Task()
         {
             this.InitializeComponent();
             givenTasks.IsChecked = true;
         }
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             rootFrame = e.Parameter as Frame;
         }
-
+        /// <summary>
+        /// Переход на страницу добавления задания
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void add_Click(object sender, RoutedEventArgs e)
         {
             rootFrame.Navigate(typeof(CreateTask));
         }
 
-        private void change_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Выбор документа из списка
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void documentsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             rootFrame.Navigate(typeof(TasksDetail), (Models.Task)documentsGrid.SelectedItem);
         }
 
+        /// <summary>
+        /// Переключение на выданные задания пользователем
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public async void givenTasks_Checked(object sender, RoutedEventArgs e)
         {
             progress.Visibility = Visibility.Visible;
@@ -76,6 +93,11 @@ namespace SchoolDocuments.Users
             var sort = tasks.All(x => x.performs.All(p => p.status == Models.PerformerStatus.Completed));
         }
 
+        /// <summary>
+        /// Переключение на выданные задания пользователю
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void toDoTasks_Checked(object sender, RoutedEventArgs e)
         {
             progress.Visibility = Visibility.Visible;
@@ -93,7 +115,11 @@ namespace SchoolDocuments.Users
             documentsGrid.ItemsSource = orderedDocuments;
             progress.Visibility = Visibility.Collapsed;
         }
-
+        /// <summary>
+        /// Переключение на выполненные задания
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void completedTasks_Checked(object sender, RoutedEventArgs e)
         {
             progress.Visibility = Visibility.Visible;
@@ -113,7 +139,11 @@ namespace SchoolDocuments.Users
             documentsGrid.ItemsSource = orderedDocuments;
             progress.Visibility = Visibility.Collapsed;
         }
-
+        /// <summary>
+        /// Поиск заданий
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void search_TextChanged(object sender, TextChangedEventArgs e)
         {
             tasksSearch.Clear();

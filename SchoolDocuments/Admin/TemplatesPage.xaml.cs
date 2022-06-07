@@ -28,21 +28,35 @@ namespace SchoolDocuments.Admin
         private static readonly List<Template> templates = new List<Template>();
         private static readonly List<Template> templatesSearch = new List<Template>();
         Frame rootFrame;
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public TemplatesPage()
         {
             this.InitializeComponent();
         }
-
+        /// <summary>
+        /// Переход на страницу создания шаблона
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void createTemplateBtn_Click(object sender, RoutedEventArgs e)
         {
             rootFrame.Navigate(typeof(CreateTemplatePage));
         }
-
+        /// <summary>
+        /// Выбор шаблона из списка
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TemplatesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             rootFrame.Navigate(typeof(CreateTemplatePage), (Template)TemplatesGrid.SelectedItem);
         }
-
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             progress.Visibility = Visibility.Visible;
@@ -60,7 +74,11 @@ namespace SchoolDocuments.Admin
             TemplatesGrid.ItemsSource = templates;
             progress.Visibility = Visibility.Collapsed;
         }
-
+        /// <summary>
+        /// Поиск шаблонов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void search_TextChanged(object sender, TextChangedEventArgs e)
         {
             templatesSearch.Clear();

@@ -28,11 +28,17 @@ namespace SchoolDocuments.Users
         private static readonly List<Models.Familiarize> documents = new List<Models.Familiarize>();
         private static readonly List<Models.Familiarize> documentsSearch = new List<Models.Familiarize>();
         Frame rootFrame;
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public FamiliarizeDocuments()
         {
             this.InitializeComponent();
         }
-
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             progress.Visibility = Visibility.Visible;
@@ -58,7 +64,11 @@ namespace SchoolDocuments.Users
             documentsGrid.ItemsSource = orderedDocuments;
             progress.Visibility = Visibility.Collapsed;
         }
-
+        /// <summary>
+        /// Поиск документов на ознакомление
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void search_TextChanged(object sender, TextChangedEventArgs e)
         {
             documentsSearch.Clear();
@@ -72,7 +82,11 @@ namespace SchoolDocuments.Users
             documentsGrid.ItemsSource = null;
             documentsGrid.ItemsSource = documentsSearch;
         }
-
+        /// <summary>
+        /// Выбор документа из списка
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void documentsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             rootFrame.Navigate(typeof(CheckFamiliarizeDocument), (Familiarize)documentsGrid.SelectedItem);

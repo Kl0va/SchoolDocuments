@@ -41,6 +41,9 @@ namespace SchoolDocuments.General
         private static List<string> signerList = new List<string>();
         private static List<Agreement> signerList1 = new List<Agreement>();
 
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public CreateDocument()
         {
             this.InitializeComponent();
@@ -51,6 +54,9 @@ namespace SchoolDocuments.General
         private static readonly List<User> users = new List<User>();
         private static readonly List<User> usersSig = new List<User>();
         private static readonly List<Models.Template> templates = new List<Models.Template>();
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
         public async void Load()
         {
             Agreement.Items.Clear();
@@ -95,6 +101,11 @@ namespace SchoolDocuments.General
             }
         }
         private static bool first = true;
+        /// <summary>
+        /// Добавление человека на подписание
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void addsigner_Click(object sender, RoutedEventArgs e)
         {
             if (!signerList.Contains(Signatory.SelectedValue.ToString()))
@@ -130,6 +141,11 @@ namespace SchoolDocuments.General
         }
 
         private static readonly List<Models.Template> templates1 = new List<Models.Template>();
+        /// <summary>
+        /// Сохранение документа
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void save_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -137,7 +153,6 @@ namespace SchoolDocuments.General
                 if (saving)
                 {
                     Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                    //File.WriteAllBytes(storageFolder.Path + @"\save.mod.docx", );
                     System.IO.File.Create(storageFolder.Path + @"\save.mod.docx").Close();
 
                     StorageFile file = await StorageFile.GetFileFromPathAsync(storageFolder.Path + @"\save.mod.docx");
@@ -233,6 +248,11 @@ namespace SchoolDocuments.General
                 ContentDialogResult result = await errorDialog.ShowAsync();
             }
         }
+        /// <summary>
+        /// Добавление человека на ознакомление
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void add_fam_Click(object sender, RoutedEventArgs e)
         {
             if (famList.Contains(familiarize.SelectedValue.ToString()))
@@ -252,7 +272,11 @@ namespace SchoolDocuments.General
         }
         private static List<Models.Template> searchTemplate = new List<Models.Template>();
         private static string header;
-
+        /// <summary>
+        /// Выбор шаблона документа
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void Template_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             header = Template.SelectedValue.ToString();
@@ -277,7 +301,11 @@ namespace SchoolDocuments.General
                 DocumentText.Document.LoadFromStream(Windows.UI.Text.TextSetOptions.FormatRtf, randAccStream);
             }
         }
-
+        /// <summary>
+        /// Добавление человека на согласование
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void add_agreed_Click(object sender, RoutedEventArgs e)
         {
             if (!signerList.Contains(Agreement.SelectedValue.ToString()))
@@ -309,6 +337,10 @@ namespace SchoolDocuments.General
         private static RichEditBox richEditBox = new RichEditBox();
 
         private static byte[] testByte;
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             
@@ -389,12 +421,11 @@ namespace SchoolDocuments.General
                 saving = false;
             }
         }
-
-        private void Signatory_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Проверка статусов людей
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void Agreement_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (saving)
@@ -491,6 +522,11 @@ namespace SchoolDocuments.General
             Save(memoryStream,"Document.rtf");
             randAccStream.Dispose();
         }
+        /// <summary>
+        /// Сохранение файла
+        /// </summary>
+        /// <param name="streams"></param>
+        /// <param name="filename"></param>
         async void Save(MemoryStream streams, string filename)
         {
             streams.Position = 0;
@@ -521,11 +557,27 @@ namespace SchoolDocuments.General
                 }
             }
         }
-
-        private void delete_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Удаление документа
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void delete_Click(object sender, RoutedEventArgs e)
         {
-            ApiWork.DeleteDocument(documentForSave.id);
-            Frame.GoBack();
+            ContentDialog errorDialog = new ContentDialog()
+            {
+                Title = "Удаление",
+                Content = "Вы точно хотите удалить документ ?",
+                PrimaryButtonText = "Ok",
+                SecondaryButtonText = "Отмена"
+            };
+
+            ContentDialogResult result = await errorDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                ApiWork.DeleteDocument(documentForSave.id);
+                Frame.GoBack();
+            }
         }
     }
 }

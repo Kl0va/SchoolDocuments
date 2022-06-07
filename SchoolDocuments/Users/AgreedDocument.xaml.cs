@@ -28,11 +28,17 @@ namespace SchoolDocuments.Users
     public sealed partial class AgreedDocument : Page
     {
         static Agreement familiarize1;
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public AgreedDocument()
         {
             this.InitializeComponent();
         }
-
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
@@ -62,13 +68,22 @@ namespace SchoolDocuments.Users
             }
         }
 
+        /// <summary>
+        /// Сохранение подписания/согласования
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void save_Click(object sender, RoutedEventArgs e)
         {
             familiarize1.status = AgreementStatus.Agreed;
             ApiWork.SaveAgreementWithout(familiarize1);
             Frame.Navigate(typeof(UsersPage));
         }
-
+        /// <summary>
+        /// Отклонение документа
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void save_Copy_Click(object sender, RoutedEventArgs e)
         {
             familiarize1.comment = Comment.Text;

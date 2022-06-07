@@ -52,6 +52,9 @@ namespace SchoolDocuments
         const string tokenEndpoint = "https://www.googleapis.com/oauth2/v4/token";
         const string userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo";
 
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public MainPage()
         {
             try
@@ -70,7 +73,9 @@ namespace SchoolDocuments
         }
 
         public static bool exiting;
-
+        /// <summary>
+        /// Подгрузка всех данных
+        /// </summary>
         public async void MainTask()
         {
             Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
@@ -114,11 +119,12 @@ namespace SchoolDocuments
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private static bool remember;
+        /// <summary>
+        /// Авторизация
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             if (RememberMe.IsChecked.Value == true)
@@ -154,7 +160,10 @@ namespace SchoolDocuments
 
         }
 
-
+        /// <summary>
+        /// Авторизация №2
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (exiting)
@@ -232,6 +241,11 @@ namespace SchoolDocuments
             }
         }
 
+        /// <summary>
+        /// Отправка запроса
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="code_verifier"></param>
         async void performCodeExchangeAsync(string code, string code_verifier)
         {
             if (!exiting)
@@ -271,12 +285,12 @@ namespace SchoolDocuments
                 HttpResponseMessage userinfoResponse = client.GetAsync(userInfoEndpoint).Result;
                 string userinfoResponseContent = await userinfoResponse.Content.ReadAsStringAsync();
 
-                JObject js1 = JObject.Parse(responseString);
-                string token = js1.Value<string>("id_token");
+                JObject jsToken = JObject.Parse(responseString);
+                string token = jsToken.Value<string>("id_token");
 
-                ApiWork.Login(js1.Value<string>("id_token"));
-                JObject js = JObject.Parse(userinfoResponseContent);
-                UserInfo.Id = js.Value<string>("sub");
+                ApiWork.Login(jsToken.Value<string>("id_token"));
+                JObject jsId = JObject.Parse(userinfoResponseContent);
+                UserInfo.Id = jsId.Value<string>("sub");
 
                 Thread.Sleep(1500);
                 Task<Models.User> getUser = ApiWork.GetUserInfo(UserInfo.Id);

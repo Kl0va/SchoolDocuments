@@ -24,11 +24,19 @@ namespace SchoolDocuments.Admin
     /// </summary>
     public sealed partial class AdminPage : Page
     {
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public AdminPage()
         {
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Проверка выбора пользователя
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (documents.IsSelected)
@@ -45,34 +53,55 @@ namespace SchoolDocuments.Admin
             }
         }
 
+        /// <summary>
+        /// Переход на страницу документов
+        /// </summary>
         private void NavigateDocuments()
         {
             myFrame.Navigate(typeof(DocumentsPage), Frame);
             pageHeader.Text = "Документы";
         }
-
+        /// <summary>
+        /// Переход на страницу шаблонов
+        /// </summary>
         private void NavigateTemplates()
         {
             myFrame.Navigate(typeof(TemplatesPage), Frame);
             pageHeader.Text = "Шаблоны документов";
         }
+        /// <summary>
+        /// Переходл на страницу ролей
+        /// </summary>
         private void NavigateRoles()
         {
             myFrame.Navigate(typeof(RolesPage), Frame);
             pageHeader.Text = "Роли сотрудников";
         }
 
-
+        /// <summary>
+        /// Открытие раскрывающегося окна
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             mySplitView.IsPaneOpen = !mySplitView.IsPaneOpen;
         }
 
+        /// <summary>
+        /// Загрузка страницы
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             NavigateDocuments();
         }
 
+        /// <summary>
+        /// Выход
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             MainPage.exiting = true;

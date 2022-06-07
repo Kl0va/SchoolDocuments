@@ -26,11 +26,17 @@ namespace SchoolDocuments.Users
     public sealed partial class CreateTask : Page
     {
         private static List<User> users = new List<User>();
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public CreateTask()
         {
             this.InitializeComponent();
         }
-
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             Agreement.Items.Clear();
@@ -55,8 +61,12 @@ namespace SchoolDocuments.Users
                 Agreement.Items.Add(fio);
             }
         }
-
         private static List<Performer> performers = new List<Performer>();
+        /// <summary>
+        /// Добавление исполнителя
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void add_agreed_Click(object sender, RoutedEventArgs e)
         {
             User user1 = null;
@@ -88,7 +98,11 @@ namespace SchoolDocuments.Users
                 performers.Add(performer);
             }
         }
-
+        /// <summary>
+        /// Сохранение задания
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void save_Click(object sender, RoutedEventArgs e)
         {
             if (performers.Count < 1)
@@ -124,7 +138,11 @@ namespace SchoolDocuments.Users
                 }
             }
         }
-
+        /// <summary>
+        /// Проверка правильности даты
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void TimeOfAgreement_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             if(DateTime.Now > TimeOfAgreement.Date)

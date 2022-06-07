@@ -33,12 +33,19 @@ namespace SchoolDocuments.Users
     /// </summary>
     public sealed partial class TasksDetail : Page
     {
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public TasksDetail()
         {
             this.InitializeComponent();
         }
 
         private static Models.Task task;
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             task = e.Parameter as Models.Task;
@@ -94,6 +101,11 @@ namespace SchoolDocuments.Users
             }
         }
         private static bool change = false;
+        /// <summary>
+        /// Выбор исполнителя в комбобоксе
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Agreement_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             foreach (Models.Performer performer in task.performs)
@@ -136,7 +148,11 @@ namespace SchoolDocuments.Users
                 }
             }
         }
-
+        /// <summary>
+        /// Удаление задания
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void save_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog errorDialog = new ContentDialog()
@@ -154,7 +170,11 @@ namespace SchoolDocuments.Users
                 Frame.GoBack();
             }
         }
-
+        /// <summary>
+        /// Сделать статус задания "В выполнении"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InProgress_Click(object sender, RoutedEventArgs e)
         {
             Models.Performer idPerf = task.performs.Where(x => x.user.email == UserInfo.Email).Single();
@@ -162,6 +182,11 @@ namespace SchoolDocuments.Users
             Frame.Navigate(typeof(UsersPage));
         }
         private static List<Document> document = new List<Document>();
+        /// <summary>
+        /// Завершить задание
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void Finished_Click(object sender, RoutedEventArgs e)
         {
             Models.Performer idPerf = task.performs.Where(x => x.user.email == UserInfo.Email).Single();
@@ -191,6 +216,11 @@ namespace SchoolDocuments.Users
 
         public static WordDocument document1 = new WordDocument();
         public static WSection section = document1.AddSection() as WSection;
+        /// <summary>
+        /// Добавление файла/просмотр прикрепленного файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             if (!change)
@@ -217,7 +247,6 @@ namespace SchoolDocuments.Users
                     List<Familiarize> familiarizes = new List<Familiarize>();
                     List<Agreement> agreements = new List<Agreement>();
 
-                    ///Тут надо сто раз подумать че это
                     Document doc = new Document(null, UserInfo.user, "Prik", "", familiarizes, agreements);
                     document.Add(doc);
                     performer = new Performer(UserInfo.user, document);
@@ -299,6 +328,11 @@ namespace SchoolDocuments.Users
                 }
             }
         }
+        /// <summary>
+        /// Открытие файла
+        /// </summary>
+        /// <param name="streams"></param>
+        /// <param name="filename"></param>
         async void Save(MemoryStream streams, string filename)
         {
             streams.Position = 0;

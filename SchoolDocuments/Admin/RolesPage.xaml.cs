@@ -29,11 +29,17 @@ namespace SchoolDocuments.Admin
         Frame rootFrame;
         private static List<User> users = new List<User>();
         private static List<User> usersSearch = new List<User>();
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public RolesPage()
         {
             this.InitializeComponent();
         }
-
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             progress.Visibility = Visibility.Visible;
@@ -51,7 +57,11 @@ namespace SchoolDocuments.Admin
             TemplatesGrid.ItemsSource = users;
             progress.Visibility = Visibility.Collapsed;
         }
-
+        /// <summary>
+        /// Поиск по пользователям
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void search_TextChanged(object sender, TextChangedEventArgs e)
         {
             usersSearch.Clear();
@@ -65,7 +75,11 @@ namespace SchoolDocuments.Admin
             TemplatesGrid.ItemsSource = null;
             TemplatesGrid.ItemsSource = usersSearch;
         }
-
+        /// <summary>
+        /// Выбор пользователя из списка
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void TemplatesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             User user = (User)TemplatesGrid.SelectedItem;

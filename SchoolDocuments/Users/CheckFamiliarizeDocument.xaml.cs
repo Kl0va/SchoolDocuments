@@ -28,18 +28,28 @@ namespace SchoolDocuments.Users
     public sealed partial class CheckFamiliarizeDocument : Page
     {
         static Familiarize familiarize1;
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         public CheckFamiliarizeDocument()
         {
             this.InitializeComponent();
         }
-
+        /// <summary>
+        /// Ознакомление с документом
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void save_Click(object sender, RoutedEventArgs e)
         {
             familiarize1.familiarized = true;
             ApiWork.SaveFam(familiarize1);
             Frame.Navigate(typeof(UsersPage));
         }
-
+        /// <summary>
+        /// Подгрузка данных
+        /// </summary>
+        /// <param name="e"></param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             if(e.Parameter != null)
